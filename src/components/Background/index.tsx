@@ -12,6 +12,7 @@ const Background = () => {
         rotatetrue={10}
         rotatefalse={-180}
         alt="파란 큰원"
+        unoptimized
       />
       <SmallCircle
         style={{ position: "absolute", top: "20vw", left: "-16vw", zIndex: 0 }}
@@ -19,6 +20,7 @@ const Background = () => {
         rotatetrue={170}
         rotatefalse={-20}
         alt="파란 작은원"
+        unoptimized
       />
       <BlueBigImg
         style={{ position: "absolute", top: "4vw", right: "-35vw", zIndex: 1 }}
@@ -26,6 +28,7 @@ const Background = () => {
         rotatetrue={130}
         rotatefalse={-50}
         alt="파란 큰원"
+        unoptimized
       />
       <SmallCircle
         style={{ position: "absolute", top: "35vw", right: "-6vw", zIndex: 0 }}
@@ -33,6 +36,7 @@ const Background = () => {
         rotatetrue={95}
         rotatefalse={-150}
         alt="파란 작은원"
+        unoptimized
       />
     </>
   );

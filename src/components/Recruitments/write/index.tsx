@@ -143,7 +143,7 @@ export default function WriteRecruitments() {
         </Boxs>
         <BoxContainer onClick={() => openModal("GATHER_FIELD")}>
           <Wrapper>
-            <Image alt="추가" src={Add} />
+            <Image alt="추가" src={Add} unoptimized />
             <Text>추가</Text>
             <BlueStar>*</BlueStar>
           </Wrapper>

@@ -34,12 +34,12 @@ export function Files({ fileName, name, size, id, multiple, setFiles, setForm, o
   return (
     <File>
       <FileBox>
-        <Image src={FileIcon} alt="" width={13} />
+        <Image src={FileIcon} alt="" width={13} unoptimized />
         <FileName title={fileName}>{fileName}</FileName>
         <Size>{(size / 1024.0).toFixed(2) + "KB"}</Size>
       </FileBox>
       <DelBtn onClick={deleteFile}>
-        <Image alt="x" src={XBtn} width={15} />
+        <Image alt="x" src={XBtn} width={15} unoptimized />
       </DelBtn>
     </File>
   );

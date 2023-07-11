@@ -15,7 +15,7 @@ export const Header = () => {
       <Container>
         <Wrapper>
           <Link href="/">
-            <Image src={Logo} width={110} height={24} alt="jobis" />
+            <Image src={Logo} width={110} height={24} alt="jobis" unoptimized />
           </Link>
           <HStack gap={52}>
             <HStack position="relative" justify="center">

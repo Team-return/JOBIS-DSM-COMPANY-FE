@@ -35,7 +35,7 @@ export const Applicant = () => {
           return (
             <ApplicationContainer key={i}>
               <Stack align="center">
-                <ProfileImg src={InfoImg} width={50} height={50} alt="" />
+                <ProfileImg src={InfoImg} width={50} height={50} alt="" unoptimized />
                 <VStack margin={["left", 15]}>
                   <Text size="Body3">{res.student_name}</Text>
                   <Text size="Body4" color="gray60">

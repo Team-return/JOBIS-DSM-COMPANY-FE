@@ -53,7 +53,7 @@ const TechModal = () => {
           </div>
           <div>
             <SearchInput type="text" value={search} onChange={onChange} />
-            <SearchIcon src={SearchBtn} width={40} height={40} alt="" />
+            <SearchIcon src={SearchBtn} width={40} height={40} alt="" unoptimized />
           </div>
         </TitleWrapper>
         <SmallCardWrapper>

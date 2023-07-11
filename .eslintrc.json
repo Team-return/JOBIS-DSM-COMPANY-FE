@@ -1,0 +1,18 @@
+{
+  "env": {
+    "browser": true,
+    "es2022": true,
+    "jest/globals": true,
+    "node": true,
+    "worker": true
+  },
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:jest/recommended",
+    "plugin:jest/style",
+    "next/core-web-vitals"
+  ]
+}

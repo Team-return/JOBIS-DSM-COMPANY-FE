@@ -12,6 +12,12 @@ const nextConfig = {
   swcMinify: true, // 코드 경량화 작업에 Terser가 아닌 SWC를 사용합니다.
   images: {
     domains: ["jobis-file.s3.ap-northeast-2.amazonaws.com"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "**.example.com",
+      },
+    ],
   },
   output: "export",
 };

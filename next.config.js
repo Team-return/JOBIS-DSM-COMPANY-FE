@@ -13,6 +13,7 @@ const nextConfig = {
   images: {
     domains: ["jobis-file.s3.ap-northeast-2.amazonaws.com"],
   },
+  output: "export",
 };
 
 module.exports = nextConfig;

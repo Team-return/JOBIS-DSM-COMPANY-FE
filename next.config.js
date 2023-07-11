@@ -12,6 +12,8 @@ const nextConfig = {
   swcMinify: true, // 코드 경량화 작업에 Terser가 아닌 SWC를 사용합니다.
   images: {
     domains: ["*"],
+    loader: "akamai",
+    path: "/",
   },
   output: "export",
 };

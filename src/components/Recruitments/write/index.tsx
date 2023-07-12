@@ -280,7 +280,7 @@ export default function WriteRecruitments() {
             router.push("/");
           }}
         >
-          기업 등록 완료
+          의뢰서 작성 완료
         </ConfirmRequestButton>
       </Stack>
 

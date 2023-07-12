@@ -6,7 +6,7 @@ import Image from "next/image";
 import { styled } from "styled-components";
 import { NoResult } from "../Recruitments/NoResult";
 import { Spinner } from "../Spinner";
-import InfoImg from "../../../public/INFO.png";
+import Link from "next/link";
 
 export const Applicant = () => {
   const { data, isLoading, error } = useCompanyApplicants();
@@ -35,7 +35,7 @@ export const Applicant = () => {
           return (
             <ApplicationContainer key={i}>
               <Stack align="center">
-                <ProfileImg src={InfoImg} width={50} height={50} alt="" unoptimized />
+                <ProfileImg src={res.profile_image_url} width={50} height={50} alt="" unoptimized />
                 <VStack margin={["left", 15]}>
                   <Text size="Body3">{res.student_name}</Text>
                   <Text size="Body4" color="gray60">
@@ -51,9 +51,11 @@ export const Applicant = () => {
                 {res.attachments?.map(
                   (attachment, idx) =>
                     attachment.type == "URL" && (
-                      <Text key={idx} size="Body4" whiteSpace="nowrap">
-                        {attachment.url}
-                      </Text>
+                      <Link key={idx} href={attachment.url} passHref>
+                        <Url target="_blank" rel="noopener noreferrer">
+                          {attachment.url}
+                        </Url>
+                      </Link>
                     )
                 )}
               </VStack>
@@ -64,9 +66,9 @@ export const Applicant = () => {
                 {res.attachments?.map(
                   (attachment, idx) =>
                     attachment.type == "FILE" && (
-                      <Text size="Body4" key={idx} whiteSpace="nowrap">
-                        {attachment.url}
-                      </Text>
+                      <Link key={idx} href={attachment.url} passHref>
+                        <Url>{attachment.url}</Url>
+                      </Link>
                     )
                 )}
               </VStack>
@@ -104,7 +106,7 @@ const ApplicationContainer = styled.div`
   position: relative;
   padding: 20px 22px;
   width: 297px;
-  height: 396px;
+  min-height: 396px;
   box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.05);
   border-radius: 10px;
   transition: 1s;
@@ -129,4 +131,16 @@ const CreateDate = styled(Text)`
   position: absolute;
   bottom: 20px;
   right: 24px;
+`;
+
+const Url = styled.a`
+  display: inline-block;
+  color: #237bc9;
+  font-size: 14px;
+  font-weight: 400;
+  width: 253px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  text-decoration: underline;
 `;

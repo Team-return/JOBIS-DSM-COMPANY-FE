@@ -48,7 +48,7 @@ export const MyCompany = () => {
         </VStack>
         <MenuWrapper>
           {dropdown && (
-            <OutsideClickHandler onOutSideClick={() => setDropDown(false)}>
+            <OutsideClickHandler onOutsideClick={() => setDropDown(false)}>
               <Logout
                 onClick={() => {
                   cookie.remove("access_token");

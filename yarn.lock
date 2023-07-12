@@ -2268,14 +2268,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@team-return/design-system@npm:^1.0.75":
-  version: 1.0.75
-  resolution: "@team-return/design-system@npm:1.0.75"
+"@team-return/design-system@npm:^1.0.79":
+  version: 1.0.79
+  resolution: "@team-return/design-system@npm:1.0.79"
   dependencies:
     react: ^18.2.0
     react-dom: ^18.2.0
     zustand: ^4.3.7
-  checksum: 356b2a878b22951d21d71fc297a0ce2ed4c741f3501db7d99b0745fd537d7f9f20de22098c29d39e76af6c0764576348fef0adf93e4084216658c49046c1f9fc
+  checksum: 9ad7342ebce0f44dcddeac969f4c3f62895dfb2e45137fae79022f4acf6c0b9b44c005342ce59b6b5b5c8e9df65985e5ecc1cc33bddee0fad75949be77ee56d8
   languageName: node
   linkType: hard
 
@@ -4029,7 +4029,7 @@ __metadata:
     "@next/bundle-analyzer": ^13.4.6
     "@tanstack/react-query": ^4.29.5
     "@tanstack/react-query-devtools": ^4.29.6
-    "@team-return/design-system": ^1.0.75
+    "@team-return/design-system": ^1.0.79
     "@testing-library/jest-dom": ^5.16.5
     "@testing-library/react": ^14.0.0
     "@types/debug": ^4

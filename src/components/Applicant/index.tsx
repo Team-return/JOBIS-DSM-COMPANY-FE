@@ -44,22 +44,32 @@ export const Applicant = () => {
                 </VStack>
               </Stack>
               <Divider />
-              <Stack gap={4}>
-                <Text color="gray50" size="Body4">
+              <VStack gap={4}>
+                <Text color="gray50" size="Body3">
                   url
                 </Text>
                 {res.attachments?.map(
-                  (attachment, idx) => attachment.type == "URL" && <Text key={idx}>{attachment.url}</Text>
+                  (attachment, idx) =>
+                    attachment.type == "URL" && (
+                      <Text key={idx} size="Body4" whiteSpace="nowrap">
+                        {attachment.url}
+                      </Text>
+                    )
                 )}
-              </Stack>
-              <Stack>
-                <Text size="Body4" color="gray50">
+              </VStack>
+              <VStack>
+                <Text size="Body3" color="gray50">
                   첨부파일
                 </Text>
                 {res.attachments?.map(
-                  (attachment, idx) => attachment.type == "FILE" && <Text key={idx}>{attachment.url}</Text>
+                  (attachment, idx) =>
+                    attachment.type == "FILE" && (
+                      <Text size="Body4" key={idx} whiteSpace="nowrap">
+                        {attachment.url}
+                      </Text>
+                    )
                 )}
-              </Stack>
+              </VStack>
               <CreateDate color="gray60" size="Caption">
                 {res.created_at}
               </CreateDate>
@@ -101,6 +111,7 @@ const ApplicationContainer = styled.div`
   &:hover {
     box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.2);
   }
+  overflow: hidden;
 `;
 
 const ProfileImg = styled(Image)`

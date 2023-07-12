@@ -1,10 +1,14 @@
 "use client";
 
 import { useMyCompanyInfo } from "@/hooks/apis/useCompanyApi";
-import { HStack, Stack, Text, VStack, theme } from "@team-return/design-system";
+import { HStack, Stack, Text, VStack, theme, Icon } from "@team-return/design-system";
 import Image from "next/image";
 import { styled } from "styled-components";
 import { Spinner } from "../Spinner";
+import { useState } from "react";
+import OutsideClickHandler from "react-outside-click-handler";
+import { useRouter } from "next/navigation";
+import { Cookies } from "react-cookie";
 
 const companyType = {
   LEAD: "선도기업",
@@ -14,6 +18,9 @@ const companyType = {
 
 export const MyCompany = () => {
   const { data: myCompany, isLoading } = useMyCompanyInfo();
+  const [dropdown, setDropDown] = useState(false);
+  const router = useRouter();
+  const cookie = new Cookies();
 
   if (isLoading)
     return (
@@ -39,6 +46,23 @@ export const MyCompany = () => {
             {myCompany?.main_address}
           </Text>
         </VStack>
+        <MenuWrapper>
+          {dropdown && (
+            <OutsideClickHandler onOutSideClick={() => setDropDown(false)}>
+              <Logout
+                onClick={() => {
+                  cookie.remove("access_token");
+                  cookie.remove("refresh_token");
+                  setDropDown(false);
+                  router.push("/login");
+                }}
+              >
+                로그아웃
+              </Logout>
+            </OutsideClickHandler>
+          )}
+          <Icon onClick={() => setDropDown(true)} margin={["left", "auto"]} icon="KebabMenu" />
+        </MenuWrapper>
       </HStack>
       <Line />
       <VStack gap={30}>
@@ -205,4 +229,31 @@ const Grid = styled.div`
 const LoadingContainer = styled.div`
   width: 100vw;
   height: calc(100vh - 200px);
+`;
+
+const MenuWrapper = styled.div`
+  position: relative;
+  cursor: pointer;
+  margin: auto 0 auto auto;
+  height: 80px;
+  display: flex;
+  align-items: center;
+`;
+
+const Logout = styled.div`
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  bottom: 0;
+  right: 0;
+  align-items: center;
+  background-color: ${theme.color.gray10};
+  color: #e74c3c;
+  font-size: 18px;
+  height: 30px;
+  min-width: 148px;
+  border-radius: 5px;
+  padding: 22px;
+  box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.25);
+  z-index: 99;
 `;

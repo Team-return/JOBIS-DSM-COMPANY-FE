@@ -61,7 +61,7 @@ export const MyCompany = () => {
               </Logout>
             </OutsideClickHandler>
           )}
-          <Icon onClick={() => setDropDown(true)} margin={["left", "auto"]} icon="KebabMenu" />
+          <Icon onClick={() => setDropDown(true)} icon="KebabMenu" />
         </MenuWrapper>
       </HStack>
       <Line />

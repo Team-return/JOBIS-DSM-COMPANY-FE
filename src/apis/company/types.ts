@@ -1,13 +1,12 @@
-export interface ICompanyRegisterRequest {
-  name: string;
+export interface IUpdateCompanyInfoRequest {
   founded_at: string;
   representative_name: string;
   main_zip_code: string;
   sub_zip_code?: string;
   main_address: string;
-  main_address_detail: string;
+  // main_address_detail: string;
   sub_address?: string;
-  sub_address_detail?: string;
+  // sub_address_detail?: string;
   take: number;
   worker_number: number;
   company_introduce: string;
@@ -17,9 +16,14 @@ export interface ICompanyRegisterRequest {
   manager_phone_no: string;
   sub_manager_phone_no?: string;
   fax?: string;
-  password: number;
-  business_number: string;
   company_profile_url?: string;
+}
+export interface ICompanyRegisterRequest extends IUpdateCompanyInfoRequest {
+  name: string;
+  password: number;
+  main_address_detail: string;
+  sub_address_detail?: string;
+  business_number: string;
   biz_registration_url: string;
   business_area_code: number;
   service_name: string;
@@ -35,6 +39,7 @@ export interface IMyCompanyResponse {
   name: string;
   biz_no: string;
   type: string;
+  take: number;
   main_address: string;
   main_zip_code: string;
   sub_address: string;

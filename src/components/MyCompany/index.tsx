@@ -1,14 +1,20 @@
 "use client";
 
-import { useMyCompanyInfo } from "@/hooks/apis/useCompanyApi";
+import { useMyCompanyInfo, useUpdateCompanyInfo } from "@/hooks/apis/useCompanyApi";
 import { HStack, Stack, Text, VStack, theme, Icon } from "@team-return/design-system";
 import Image from "next/image";
 import { styled } from "styled-components";
 import { Spinner } from "../Spinner";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import OutsideClickHandler from "react-outside-click-handler";
 import { useRouter } from "next/navigation";
 import { Cookies } from "react-cookie";
+import { useInput } from "@/hooks/useInput";
+import { IUpdateCompanyInfoRequest } from "@/apis/company/types";
+import DaumPostcode, { Address } from "react-daum-postcode";
+import Modal from "../Modal";
+import { useModalStateStore } from "@/store/modalStore";
+import { useModal } from "@/hooks/useModal";
 
 const companyType = {
   LEAD: "선도기업",
@@ -21,6 +27,69 @@ export const MyCompany = () => {
   const [dropdown, setDropDown] = useState(false);
   const router = useRouter();
   const cookie = new Cookies();
+  const { modalState } = useModalStateStore();
+  const { closeModal, openModal } = useModal();
+  const [isEdit, setIsEdit] = useState(false);
+
+  const { form, setForm, onChange } = useInput<IUpdateCompanyInfoRequest>({
+    founded_at: "",
+    representative_name: "",
+    main_zip_code: "",
+    sub_zip_code: undefined,
+    main_address: "",
+    sub_address: undefined,
+    take: 0,
+    worker_number: 0,
+    company_introduce: "",
+    email: "",
+    manager_name: "",
+    sub_manager_name: undefined,
+    manager_phone_no: "",
+    sub_manager_phone_no: undefined,
+    fax: undefined,
+    company_profile_url: undefined,
+  });
+  const { mutate } = useUpdateCompanyInfo(form);
+
+  useEffect(() => {
+    if (myCompany) {
+      setForm({
+        founded_at: myCompany.founded_at,
+        representative_name: myCompany.representative,
+        main_zip_code: myCompany.main_zip_code,
+        sub_zip_code: myCompany.sub_zip_code,
+        main_address: myCompany.main_address,
+        sub_address: myCompany.sub_address,
+        take: myCompany.take,
+        worker_number: myCompany.workers_count,
+        company_introduce: myCompany.company_introduce,
+        email: myCompany.email,
+        manager_name: myCompany.manager_name,
+        sub_manager_name: myCompany.sub_manager_name,
+        manager_phone_no: myCompany.manager_phone_no,
+        sub_manager_phone_no: myCompany.sub_manager_phone_no,
+        fax: myCompany.fax,
+        company_profile_url: myCompany.company_logo_url,
+      });
+    }
+  }, [myCompany]);
+
+  const selectAddress = (data: Address) => {
+    if (modalState === "MAIN_ADDRESS") {
+      setForm({
+        ...form,
+        main_address: data?.address,
+        main_zip_code: data?.zonecode,
+      });
+    } else if (modalState === "SUB_ADDRESS") {
+      setForm({
+        ...form,
+        sub_address: data?.address,
+        sub_zip_code: data?.zonecode,
+      });
+    }
+    closeModal();
+  };
 
   if (isLoading)
     return (
@@ -47,120 +116,250 @@ export const MyCompany = () => {
           </Text>
         </VStack>
         <MenuWrapper>
-          {dropdown && (
-            <OutsideClickHandler onOutsideClick={() => setDropDown(false)}>
-              <Logout
+          {isEdit ? (
+            <HStack gap={14}>
+              <CancelButton onClick={() => setIsEdit(false)}>취소</CancelButton>
+              <SaveButton
                 onClick={() => {
-                  cookie.remove("access_token");
-                  cookie.remove("refresh_token");
-                  setDropDown(false);
-                  router.push("/login");
+                  setIsEdit(false);
+                  mutate();
                 }}
               >
-                로그아웃
-              </Logout>
-            </OutsideClickHandler>
+                저장
+              </SaveButton>
+            </HStack>
+          ) : (
+            <>
+              {dropdown && (
+                <OutsideClickHandler onOutsideClick={() => setDropDown(false)}>
+                  <MoreDetail>
+                    <div
+                      onClick={() => {
+                        setIsEdit(true);
+                        setDropDown(false);
+                      }}
+                    >
+                      기업정보 수정
+                    </div>
+                    <div
+                      style={{ color: "red" }}
+                      onClick={() => {
+                        cookie.remove("access_token");
+                        cookie.remove("refresh_token");
+                        setDropDown(false);
+                        router.push("/login");
+                      }}
+                    >
+                      로그아웃
+                    </div>
+                  </MoreDetail>
+                </OutsideClickHandler>
+              )}
+              <Icon onClick={() => setDropDown(true)} icon="KebabMenu" />
+            </>
           )}
-          <Icon onClick={() => setDropDown(true)} icon="KebabMenu" />
         </MenuWrapper>
       </HStack>
       <Line />
       <VStack gap={30}>
         <HStack>
-          <Stack width={800}>
+          <Stack width={940}>
             <Title>대표 서비스명</Title>
-            <Text color="gray90" size="Body1">
-              {myCompany?.service_name}
-            </Text>
+            {isEdit ? (
+              <Input value={myCompany?.service_name} />
+            ) : (
+              <Stack align="center" height={45}>
+                <Text color="gray90" size="Body1">
+                  {myCompany?.service_name}
+                </Text>
+              </Stack>
+            )}
           </Stack>
         </HStack>
         <HStack>
-          <Title>회사소개</Title>
-          <Stack width={800}>
-            <Text color="gray90" size="Body1">
-              {myCompany?.company_introduce}
-            </Text>
+          <Stack width={940}>
+            <Title>회사소개</Title>
+            {isEdit ? (
+              <TextArea name="company_introduce" onChange={onChange} value={form.company_introduce} />
+            ) : (
+              <Stack align="center" height={45}>
+                <Text color="gray90" size="Body1">
+                  {myCompany?.company_introduce}
+                </Text>
+              </Stack>
+            )}
           </Stack>
         </HStack>
         <HStack>
           <Title>본사주소</Title>
-          <Text color="gray90" size="Body1">
-            {myCompany?.main_address}
-          </Text>
+          {isEdit ? (
+            <VStack width={940} gap={16}>
+              <HStack gap={20}>
+                <Input name="main_address" value={form?.main_address} />
+                <AddressButton onClick={() => openModal("MAIN_ADDRESS")}>주소 검색</AddressButton>
+              </HStack>
+              <Input name="main_address" onChange={onChange} value={form.main_address} />
+            </VStack>
+          ) : (
+            <Stack align="center" height={45}>
+              <Text color="gray90" size="Body1">
+                {myCompany?.main_address}
+              </Text>
+            </Stack>
+          )}
         </HStack>
         <HStack>
           <Title>지점 주소</Title>
-          <Text color="gray90" size="Body1">
-            {myCompany?.sub_address}
-          </Text>
+          {isEdit ? (
+            <VStack width={940} gap={16}>
+              <HStack gap={20}>
+                <Input name="sub_address" value={form.sub_address} />
+                <AddressButton onClick={() => openModal("SUB_ADDRESS")}>주소 검색</AddressButton>
+              </HStack>
+              <Input name="sub_address" onChange={onChange} value={form.sub_address} />
+            </VStack>
+          ) : (
+            <Stack align="center" height={45}>
+              <Text color="gray90" size="Body1">
+                {myCompany?.sub_address}
+              </Text>
+            </Stack>
+          )}
         </HStack>
         <Grid>
           <VStack gap={30}>
             <HStack>
               <Title>대표</Title>
-              <Text color="gray90" size="Body1">
-                {myCompany?.representative}
-              </Text>
+
+              {isEdit ? (
+                <Input name="representative_name" onChange={onChange} value={form.representative_name} />
+              ) : (
+                <Stack align="center" height={45}>
+                  <Text color="gray90" size="Body1">
+                    {myCompany?.representative}
+                  </Text>
+                </Stack>
+              )}
             </HStack>
             <HStack>
               <Title>설립일</Title>
-              <Text color="gray90" size="Body1">
-                {myCompany?.founded_at}
-              </Text>
+              {isEdit ? (
+                <Input name="founded_at" type="date" onChange={onChange} value={form.founded_at} />
+              ) : (
+                <Stack align="center" height={45}>
+                  <Text color="gray90" size="Body1">
+                    {myCompany?.founded_at}
+                  </Text>
+                </Stack>
+              )}
             </HStack>
             <HStack>
               <Title>담당자1</Title>
-              <Text color="gray90" size="Body1">
-                {myCompany?.manager_name}
-              </Text>
+              {isEdit ? (
+                <Input name="manager_name" onChange={onChange} value={form.manager_name} />
+              ) : (
+                <Stack align="center" height={45}>
+                  <Text color="gray90" size="Body1">
+                    {myCompany?.manager_name}
+                  </Text>
+                </Stack>
+              )}
             </HStack>
             <HStack>
               <Title>담당자2</Title>
-              <Text color="gray90" size="Body1">
-                {myCompany?.sub_manager_name}
-              </Text>
+              {isEdit ? (
+                <Input name="sub_manager_name" onChange={onChange} value={form.sub_manager_name} />
+              ) : (
+                <Stack align="center" height={45}>
+                  <Text color="gray90" size="Body1">
+                    {myCompany?.sub_manager_name}
+                  </Text>
+                </Stack>
+              )}
             </HStack>
             <HStack>
               <Title>이메일</Title>
-              <Text color="gray90" size="Body1">
-                {myCompany?.email}
-              </Text>
+              {isEdit ? (
+                <Input name="email" onChange={onChange} value={form.email} />
+              ) : (
+                <Stack align="center" height={45}>
+                  <Text color="gray90" size="Body1">
+                    {myCompany?.email}
+                  </Text>
+                </Stack>
+              )}
             </HStack>
           </VStack>
           <VStack gap={30}>
             <HStack>
               <Title>사업자번호</Title>
-              <Text color="gray90" size="Body1">
-                {myCompany?.biz_no}
-              </Text>
+              {isEdit ? (
+                <Input value={myCompany?.biz_no} />
+              ) : (
+                <Stack align="center" height={45}>
+                  <Text color="gray90" size="Body1">
+                    {myCompany?.biz_no}
+                  </Text>
+                </Stack>
+              )}
             </HStack>
             <HStack>
               <Title>근로자 수</Title>
-              <Text color="gray90" size="Body1">
-                {myCompany?.workers_count}
-              </Text>
+              {isEdit ? (
+                <Input name="worker_number" onChange={onChange} value={form.worker_number} />
+              ) : (
+                <Stack align="center" height={45}>
+                  <Text color="gray90" size="Body1">
+                    {myCompany?.workers_count}
+                  </Text>
+                </Stack>
+              )}
             </HStack>
             <HStack>
               <Title>전화번호1</Title>
-              <Text color="gray90" size="Body1">
-                {myCompany?.manager_phone_no}
-              </Text>
+              {isEdit ? (
+                <Input name="manager_phone_no" onChange={onChange} value={form.manager_phone_no} />
+              ) : (
+                <Stack align="center" height={45}>
+                  <Text color="gray90" size="Body1">
+                    {myCompany?.manager_phone_no}
+                  </Text>
+                </Stack>
+              )}
             </HStack>
             <HStack>
               <Title>전화번호2</Title>
-              <Text color="gray90" size="Body1">
-                {myCompany?.sub_manager_phone_no}
-              </Text>
+              {isEdit ? (
+                <Input name="sub_manager_phone_no" onChange={onChange} value={form.sub_manager_phone_no} />
+              ) : (
+                <Stack align="center" height={45}>
+                  <Text color="gray90" size="Body1">
+                    {myCompany?.sub_manager_phone_no}
+                  </Text>
+                </Stack>
+              )}
             </HStack>
             <HStack>
               <Title>팩스</Title>
-              <Text color="gray90" size="Body1">
-                {myCompany?.fax}
-              </Text>
+              {isEdit ? (
+                <Input name="fax" onChange={onChange} value={form.fax} />
+              ) : (
+                <Stack align="center" height={45}>
+                  <Text color="gray90" size="Body1">
+                    {myCompany?.fax}
+                  </Text>
+                </Stack>
+              )}
             </HStack>
           </VStack>
         </Grid>
       </VStack>
+
+      {(modalState === "MAIN_ADDRESS" || modalState === "SUB_ADDRESS") && (
+        <Modal width={400} onClose={closeModal}>
+          <DaumPostcode onComplete={selectAddress} />
+        </Modal>
+      )}
     </Container>
   );
 };
@@ -180,7 +379,7 @@ const Logo = styled(Image)`
 const CompanyType = styled.div<{ color?: string }>`
   display: flex;
   justify-content: center;
-  align-itmes: center;
+  align-items: center;
   width: 80px;
   border-radius: 100px;
   padding: 5px 12px;
@@ -212,7 +411,11 @@ const Line = styled.div`
 `;
 
 const Title = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
   width: 120px;
+  height: 45px;
   font-size: 18px;
   font-weight: 700;
   color: ${theme.color.liteBlue};
@@ -224,6 +427,7 @@ const Grid = styled.div`
   width: 100%;
   display: grid;
   grid-template-columns: 1fr 1fr;
+  gap: 50px;
 `;
 
 const LoadingContainer = styled.div`
@@ -240,20 +444,95 @@ const MenuWrapper = styled.div`
   align-items: center;
 `;
 
-const Logout = styled.div`
+const MoreDetail = styled.div`
   position: absolute;
   display: flex;
-  justify-content: center;
+  align-items: flex-start;
+  flex-direction: column;
   bottom: 0;
   right: 0;
-  align-items: center;
   background-color: ${theme.color.gray10};
-  color: #e74c3c;
+  color: ${theme.color.gray80};
   font-size: 18px;
-  height: 30px;
-  min-width: 148px;
+  min-height: 30px;
+  min-width: 100px;
+  gap: 10px;
   border-radius: 5px;
-  padding: 22px;
+  padding: 10px 22px;
   box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.25);
   z-index: 99;
+  white-space: nowrap;
+`;
+
+const Input = styled.input<{ disabled?: boolean }>`
+  width: 100%;
+  height: 45px;
+  padding: 10px 15px;
+  border: 0;
+  outline: 0;
+  margin-left: auto;
+  border: 1px solid #cccccc;
+  border-radius: 2px;
+  font-size: 18px;
+  font-weight: 400;
+  &::placeholder {
+    color: #7f7f7f;
+  }
+  cursor: ${({ disabled }) => (disabled ? "not-allowed" : "auto")};
+`;
+
+const AddressButton = styled.button`
+  all: unset;
+  height: 45px;
+  padding: 0 30px;
+  border-radius: 3px;
+  border: 1px solid ${theme.color.liteBlue};
+  color: ${theme.color.liteBlue};
+  font-size: 18px;
+  font-weight: 400;
+  white-space: nowrap;
+  cursor: pointer;
+  &:hover {
+    background-color: ${theme.color.gray40};
+  }
+  &:active {
+    background-color: ${theme.color.liteBlue};
+    color: ${theme.color.gray10};
+  }
+`;
+
+const TextArea = styled.textarea`
+  width: 100%;
+  min-height: 90px;
+  border: 0;
+  outline: 0;
+  border: 1px solid #cccccc;
+  border-radius: 2px;
+  resize: none;
+  font-size: 18px;
+  font-weight: 400;
+  padding: 10px 15px;
+  &::placeholder {
+    color: #7f7f7f;
+  }
+`;
+
+const SaveButton = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+  background-color: ${theme.color.liteBlue};
+  padding: 20px;
+  height: 40px;
+  width: auto;
+  font-size: 18px;
+  font-weight: 400;
+  color: ${theme.color.gray10};
+`;
+
+const CancelButton = styled(SaveButton)`
+  color: ${theme.color.gray60};
+  background-color: ${theme.color.gray10};
+  border: 1px solid ${theme.color.gray50};
 `;

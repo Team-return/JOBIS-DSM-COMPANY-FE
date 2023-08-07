@@ -1,6 +1,6 @@
-import { companyRegister, myCompanyInfo } from "@/apis/company";
-import { ICompanyRegisterRequest } from "@/apis/company/types";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { companyRegister, myCompanyInfo, updateCompanyInfo } from "@/apis/company";
+import { ICompanyRegisterRequest, IUpdateCompanyInfoRequest } from "@/apis/company/types";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 
 export const useCompanyRegister = (body: ICompanyRegisterRequest) => {
@@ -9,11 +9,22 @@ export const useCompanyRegister = (body: ICompanyRegisterRequest) => {
   return useMutation(() => companyRegister(body), {
     onSuccess: () => {
       alert("성공");
-      router.push("/");
+      router.push("/login");
     },
   });
 };
 
 export const useMyCompanyInfo = () => {
   return useQuery(["myCompany"], () => myCompanyInfo());
+};
+
+export const useUpdateCompanyInfo = (body: IUpdateCompanyInfoRequest) => {
+  const queryClient = useQueryClient();
+
+  return useMutation(() => updateCompanyInfo(body), {
+    onSuccess: () => {
+      alert("성공");
+      queryClient.invalidateQueries(["myCompany"]);
+    },
+  });
 };

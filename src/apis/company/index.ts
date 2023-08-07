@@ -1,5 +1,10 @@
 import { instance } from "../axios";
-import { ICompanyRegisterRequest, ICheckBuisnessNumberResponse, IMyCompanyResponse } from "./types";
+import {
+  ICompanyRegisterRequest,
+  ICheckBuisnessNumberResponse,
+  IMyCompanyResponse,
+  IUpdateCompanyInfoRequest,
+} from "./types";
 
 const router = "/companies";
 
@@ -17,5 +22,10 @@ export const companyRegister = async (body: ICompanyRegisterRequest) => {
 
 export const myCompanyInfo = async () => {
   const { data } = await instance.get<IMyCompanyResponse>(`${router}/my`);
+  return data;
+};
+
+export const updateCompanyInfo = async (body: IUpdateCompanyInfoRequest) => {
+  const { data } = await instance.patch(`${router}`, body);
   return data;
 };

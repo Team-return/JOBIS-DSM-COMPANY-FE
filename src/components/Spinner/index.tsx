@@ -24,7 +24,7 @@ export const Spinner = ({ size = 180, position, isMessage }: LoadingProps) => {
 
   return (
     <_Wrapper pos={position ?? "center"}>
-      <Img size={size} src={LoadingImg} alt="" />
+      <Img size={size} src={LoadingImg} alt="" unoptimized />
       {isMessage && <Text margin={[28, 0]} color="blue" size="Body1">{`Loading${".".repeat(message)}`}</Text>}
     </_Wrapper>
   );

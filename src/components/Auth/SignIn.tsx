@@ -90,6 +90,7 @@ export default function SignIn() {
           height={20}
           src={InfoIcon}
           alt="image"
+          unoptimized
         />
         {hover && <InfoText>{hoverInfo()}</InfoText>}
         <Button onClick={Auth}>{isNext ? (isExist ? "로그인하기" : "등록하기") : "사업자 번호 확인"}</Button>

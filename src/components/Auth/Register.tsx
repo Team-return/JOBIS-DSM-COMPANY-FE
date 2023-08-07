@@ -269,7 +269,7 @@ export default function Register() {
 
       <Stack gap={30}>
         <CancelButton>취소</CancelButton>
-        <ConfirmRequestButton onClick={() => registerCompany()}>의뢰서 작성 완료</ConfirmRequestButton>
+        <ConfirmRequestButton onClick={() => registerCompany()}>기업 등록 완료</ConfirmRequestButton>
       </Stack>
 
       {(modalState === "MAIN_ADDRESS" || modalState === "SUB_ADDRESS") && (

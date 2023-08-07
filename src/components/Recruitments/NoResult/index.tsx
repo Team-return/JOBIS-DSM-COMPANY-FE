@@ -8,7 +8,7 @@ export const NoResult = () => {
   return (
     <Container>
       <VStack align="center">
-        <Image src={NoGesture} width={165} height={165} alt="" />
+        <Image src={NoGesture} width={165} height={165} alt="" unoptimized />
         <Text color="gray90" size="Heading4">
           작성된 모집의뢰서가 없습니다
         </Text>

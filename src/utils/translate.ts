@@ -8,7 +8,7 @@ export const hiringProgressType: Record<IHiringProgress, string> = {
   TASK: "과제 제출",
   PERSONALITY: "인적성테스트",
   TECH_INTERVIEW: "기술면접",
-  CULTURE_INTERVIEW: "걸쳐면접",
+  CULTURE_INTERVIEW: "컬쳐면접",
   FINAL_INTERVIEW: "최종면접",
   "": "",
 };

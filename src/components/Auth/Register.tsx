@@ -92,7 +92,12 @@ export default function Register() {
     founded_at: date_number(founded_at),
     fax: date_number(fax ?? "") || undefined,
     manager_phone_no: manager_phone_no?.replace(/-/g, ""),
+    sub_zip_code: sub_zip_code || undefined,
+    sub_address: sub_address || undefined,
+    sub_address_detail: sub_address_detail || undefined,
+    sub_manager_name: sub_manager_name || undefined,
     sub_manager_phone_no: sub_manager_phone_no?.replace(/-/g, "") || undefined,
+    company_profile_url: company_profile_url || undefined,
   });
 
   const selectAddress = (data: Address) => {

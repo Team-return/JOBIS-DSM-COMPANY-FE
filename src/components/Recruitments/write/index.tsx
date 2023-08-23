@@ -281,7 +281,6 @@ export default function WriteRecruitments() {
         <ConfirmRequestButton
           onClick={() => {
             createRecruitmentRequest.mutate();
-            router.push("/");
           }}
         >
           의뢰서 작성 완료

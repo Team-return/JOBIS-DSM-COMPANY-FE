@@ -9,7 +9,7 @@ export const useCompanyRegister = (body: ICompanyRegisterRequest) => {
   return useMutation(() => companyRegister(body), {
     onSuccess: () => {
       alert("성공");
-      router.push("/");
+      router.push("/login");
     },
   });
 };

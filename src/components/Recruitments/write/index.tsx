@@ -122,7 +122,11 @@ export default function WriteRecruitments() {
             return (
               <GatherFieldBox key={i}>
                 <FieldBoxTitle>
-                  분야 : {job_name?.codes.filter((code) => job_codes.includes(code?.code)).join(" / ")}
+                  분야 :{" "}
+                  {job_name?.codes
+                    .filter((code) => job_codes.includes(code?.code))
+                    .map((code) => code.keyword)
+                    .join(" / ")}
                 </FieldBoxTitle>
                 <FieldText>
                   사용기술 :{" "}
@@ -277,7 +281,6 @@ export default function WriteRecruitments() {
         <ConfirmRequestButton
           onClick={() => {
             createRecruitmentRequest.mutate();
-            router.push("/");
           }}
         >
           의뢰서 작성 완료

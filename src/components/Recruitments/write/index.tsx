@@ -218,7 +218,7 @@ export default function WriteRecruitments() {
         placeholder="만원/월"
         unit="만원/월"
       />
-      <Input name="pay" value={pay} onChange={onChange} title="정규직 전환시" placeholder="만원/년" unit="만원/월" />
+      <Input name="pay" value={pay} onChange={onChange} title="정규직 전환시" placeholder="만원/년" unit="만원/년" />
       <TextArea name="benefits" value={benefits} onChange={onChange} title="복리후생" />
       <CustomInput>
         <Label>

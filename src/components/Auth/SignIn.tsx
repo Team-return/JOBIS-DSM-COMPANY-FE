@@ -73,7 +73,14 @@ export default function SignIn() {
       <Wrapper>
         <Title>사업자 인증</Title>
         {isNext ? (
-          <Input name="pw" value={pw} onChange={onChange} maxLength={4} placeholder="비밀번호를 입력해주세요" />
+          <Input
+            name="pw"
+            value={pw}
+            onChange={onChange}
+            maxLength={4}
+            placeholder="비밀번호를 입력해주세요"
+            autoComplete="off"
+          />
         ) : (
           <Input
             name="id"
@@ -81,6 +88,7 @@ export default function SignIn() {
             placeholder="사업자 번호를 입력해주세요"
             maxLength={12}
             onChange={onChange}
+            autoComplete="off"
           />
         )}
         <InfoImg

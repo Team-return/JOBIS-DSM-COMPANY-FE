@@ -47,7 +47,7 @@ export default function EditMyPage() {
     company_profile_url: undefined,
     service_name: "",
   });
-  const { mutateAsync } = useUpdateCompanyInfo({
+  const { mutate } = useUpdateCompanyInfo({
     ...form,
     fax: form.fax || undefined,
     sub_zip_code: form.sub_zip_code || undefined,
@@ -130,8 +130,7 @@ export default function EditMyPage() {
             <CancelButton onClick={() => router.push("/mypage")}>취소</CancelButton>
             <SaveButton
               onClick={async () => {
-                await mutateAsync(myCompany!.company_id);
-                router.push("/mypage");
+                mutate(myCompany!.company_id);
               }}
             >
               저장

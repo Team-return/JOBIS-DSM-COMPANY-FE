@@ -25,7 +25,7 @@ export const myCompanyInfo = async () => {
   return data;
 };
 
-export const updateCompanyInfo = async (body: IUpdateCompanyInfoRequest) => {
-  const { data } = await instance.patch(`${router}`, body);
+export const updateCompanyInfo = async (body: IUpdateCompanyInfoRequest, company_id: number) => {
+  const { data } = await instance.patch(`${router}/${company_id}`, body);
   return data;
 };

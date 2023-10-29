@@ -7,6 +7,7 @@ import { Noto_Sans_KR } from "next/font/google";
 import { ReactNode } from "react";
 import { Header } from "@/components/Header";
 import { usePathname } from "next/navigation";
+import { ToastContainer } from "@team-return/design-system";
 
 const notoSans = Noto_Sans_KR({
   weight: ["400", "500", "700"],
@@ -23,6 +24,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <div id="modal-root"></div>
         <ReactQuery>
           <StyledComponentsRegistry>
+            <ToastContainer />
             {pathname !== "/login" && pathname !== "/registration" && <Header />}
             {children}
           </StyledComponentsRegistry>

@@ -1,4 +1,5 @@
 export interface IArea {
+  id?: number;
   job_codes: number[];
   tech_codes: number[];
   hiring: number;
@@ -26,21 +27,28 @@ export interface IRecruitment {
   train_pay: string;
   pay: string;
   benefits: string;
-  military_support: boolean;
+  military: boolean;
   hiring_progress: IHiringProgress[];
-  submit_document: string;
+  submit_document?: string;
   start_date: string;
   end_date: string;
   etc: string;
+}
+
+export interface IEditRecruitmentRequest extends Omit<IRecruitment, "areas" | "military_support"> {
+  military: boolean;
 }
 
 export interface IMyRecruitmentResponse extends Omit<IRecruitment, "areas"> {
   recruitment_id: number;
   recruit_year: number;
   areas: {
-    job: string;
+    id?: number;
+    job: string[];
     tech: string[];
     major_task: string;
-    hiring_count: number;
+    hiring: number;
   }[];
+  company_name: string;
+  company_profile_url: string;
 }

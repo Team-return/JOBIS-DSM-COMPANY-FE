@@ -1,7 +1,7 @@
 "use client";
 
 import { styled } from "styled-components";
-import React from "react";
+import React, { useEffect } from "react";
 import OptionTitle from "../../OptionTitle";
 import { Icon, Stack, VStack, theme } from "@team-return/design-system";
 import { CustomInput, Input, TextArea } from "../../Input";
@@ -23,6 +23,7 @@ import { KeyByValue } from "@/utils/useKeyByValue";
 import LicenseModal from "@/components/Modal/licenseModal";
 import XBtn from "../../../../public/X.svg";
 import { useRouter } from "next/navigation";
+import { useAreaState } from "@/store/areasState";
 
 export default function WriteRecruitments() {
   const date = new Date();
@@ -37,7 +38,7 @@ export default function WriteRecruitments() {
     train_pay: "",
     pay: "",
     benefits: "",
-    military_support: false,
+    military: false,
     hiring_progress: ["DOCUMENT"],
     submit_document: "",
     start_date: "",
@@ -54,7 +55,7 @@ export default function WriteRecruitments() {
     train_pay,
     pay,
     benefits,
-    military_support,
+    military,
     submit_document,
     start_date,
     end_date,
@@ -64,6 +65,7 @@ export default function WriteRecruitments() {
   const createRecruitmentRequest = useCreateRecruitmentRequest(form);
 
   const { modalState, closeModal, openModal } = useModal();
+  const { resetArea } = useAreaState();
 
   const [setProgressList] = useProgressListStore((store) => [store.setProgressList]);
 
@@ -91,6 +93,21 @@ export default function WriteRecruitments() {
   const { data: job_name } = useGetCode("JOB");
 
   const router = useRouter();
+
+  const preventClose = (e: BeforeUnloadEvent) => {
+    e.preventDefault();
+    e.returnValue = ""; //Chrome에서 동작하도록; deprecated
+  };
+
+  useEffect(() => {
+    (() => {
+      window.addEventListener("beforeunload", preventClose);
+    })();
+
+    return () => {
+      window.removeEventListener("beforeunload", preventClose);
+    };
+  }, []);
 
   return (
     <Container>
@@ -193,6 +210,7 @@ export default function WriteRecruitments() {
               min={0}
               max={100}
               maxLength={3}
+              autoComplete="off"
             />
             <Percent>% 이내</Percent>
           </Wrapper>
@@ -200,6 +218,18 @@ export default function WriteRecruitments() {
       </CustomInput>
 
       <OptionTitle title="근무조건" />
+      {/* <LineContainer>
+        <LineTitle>
+          근무시간 <BlueStar>*</BlueStar>
+        </LineTitle>
+        <EndWrapper>
+          <LineContent>
+            <RadioButton name="work_hours">7시간</RadioButton>
+            <RadioButton name="work_hours">8시간</RadioButton>
+            <RadioButton name="work_hours">유연근무</RadioButton>
+          </LineContent>
+        </EndWrapper>
+      </LineContainer> */}
       <Input
         name="work_hours"
         value={work_hours}
@@ -208,6 +238,7 @@ export default function WriteRecruitments() {
         title="근무시간"
         placeholder="시간"
         unit="시간"
+        autoComplete="off"
       />
       <Input
         name="train_pay"
@@ -217,16 +248,35 @@ export default function WriteRecruitments() {
         title="실습수당"
         placeholder="만원/월"
         unit="만원/월"
+        autoComplete="off"
       />
-      <Input name="pay" value={pay} onChange={onChange} title="정규직 전환시" placeholder="만원/년" unit="만원/월" />
+      <Input
+        name="pay"
+        value={pay}
+        onChange={onChange}
+        title="정규직 전환시"
+        placeholder="만원/년"
+        unit="만원/월"
+        autoComplete="off"
+      />
+      {/* <LineContainer>
+        <LineTitle>정규직 전환시</LineTitle>
+        <EndWrapper>
+          <LineContent>
+            <RadioButton name="pay">10,000 만원/년</RadioButton>
+            <RadioButton name="pay">10,000 ~ 15,000 만원/년</RadioButton>
+            <RadioButton name="pay">추후협의</RadioButton>
+          </LineContent>
+        </EndWrapper>
+      </LineContainer> */}
       <TextArea name="benefits" value={benefits} onChange={onChange} title="복리후생" />
       <CustomInput>
         <Label>
           <input
-            name="military_support"
-            checked={military_support}
+            name="military"
+            checked={military}
             type="checkbox"
-            onChange={() => setForm({ ...form, military_support: !military_support })}
+            onChange={() => setForm({ ...form, military: !military })}
           />
           병역특례 신청
         </Label>
@@ -266,7 +316,14 @@ export default function WriteRecruitments() {
           </Droppable>
         </DragDropContext>
       </CustomInput>
-      <Input name="submit_document" value={submit_document} required onChange={onChange} title="제출 서류" />
+      <Input
+        name="submit_document"
+        value={submit_document}
+        required
+        onChange={onChange}
+        title="제출 서류"
+        autoComplete="off"
+      />
       <CustomInput required title="모집 기간">
         <DateContainer>
           <DateInput name="start_date" onChange={onChange} value={start_date} type="date" />
@@ -274,7 +331,7 @@ export default function WriteRecruitments() {
           <DateInput name="end_date" onChange={onChange} value={end_date} type="date" />
         </DateContainer>
       </CustomInput>
-      <TextArea name="etc" value={etc} onChange={onChange} title="기타 사항" />
+      <TextArea name="etc" value={etc} onChange={onChange} title="기타 사항" autoComplete="off" />
 
       <Stack gap={30} margin={["top", 100]}>
         <CancelButton onClick={() => router.push("/login")}>취소</CancelButton>
@@ -288,7 +345,14 @@ export default function WriteRecruitments() {
       </Stack>
 
       {modalState === "GATHER_FIELD" && (
-        <Modal width={700} onClose={closeModal} closeAble>
+        <Modal
+          width={700}
+          onClose={() => {
+            closeModal();
+            resetArea();
+          }}
+          closeAble
+        >
           <GatherModal setForm={setForm} />
         </Modal>
       )}

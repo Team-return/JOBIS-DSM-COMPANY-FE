@@ -2,7 +2,7 @@
 
 import Register from "@/components/Auth/Register";
 import Background from "@/components/Background";
-import { styled } from "styled-components";
+import styled from "styled-components";
 
 export default function Registration() {
   return (

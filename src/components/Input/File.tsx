@@ -23,7 +23,7 @@ export function Files({ fileName, name, size, id, multiple, setFiles, setForm, o
     if (multiple) {
       setForm((prev) => ({
         ...prev,
-        [name + "_urls"]: prev.attachment_urls?.filter((_, i) => id !== i),
+        [name + "_urls"]: prev.attachment_urls?.filter((_, idx) => id !== idx),
       }));
     } else {
       setForm((prev) => ({ ...prev, [name + "_url"]: "" }));

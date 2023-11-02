@@ -57,10 +57,10 @@ const TechModal = () => {
           </div>
         </TitleWrapper>
         <SmallCardWrapper>
-          {techList.map((res, i) => {
+          {techList.map((res, idx) => {
             return (
               <>
-                <SmallCard key={i}>
+                <SmallCard key={idx}>
                   {res.keyword}
                   <XCardText onClick={() => DeleteArray(res.code)}>x</XCardText>
                 </SmallCard>
@@ -73,7 +73,7 @@ const TechModal = () => {
             .filter((datas) => {
               return datas.keyword.includes(search);
             })
-            .map((res, i) => {
+            .map((res, idx) => {
               const tech = {
                 code: res.code,
                 keyword: res.keyword,
@@ -81,7 +81,7 @@ const TechModal = () => {
               return (
                 <>
                   <BigCard
-                    key={i}
+                    key={idx}
                     colorBool={techList.filter((datas) => datas.code === res.code).length ? true : false}
                     onClick={() => {
                       CheckArray(tech);

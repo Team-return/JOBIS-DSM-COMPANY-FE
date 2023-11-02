@@ -25,8 +25,6 @@ const EditRecruitArea = ({ setForm }: IPropsType) => {
 
   const { techList, resetTechList } = useTechState();
 
-  console.log(techs);
-
   const { data: myRecruitment } = useMyRecruitment();
   const { mutate } = useUpdateRecruitArea({ ...area, id: undefined });
 
@@ -80,21 +78,21 @@ const EditRecruitArea = ({ setForm }: IPropsType) => {
             <FieldTitle>응용프로그래밍</FieldTitle>
           </FieldTitleWrapper>
           <VStack gap={30}>
-            {jobType.map((type, i) => {
+            {jobType.map((type, idx) => {
               return (
-                <FieldWrapper key={i}>
+                <FieldWrapper key={idx}>
                   <Field>
                     {jobs?.codes
                       .filter((code) => code.job_type === type)
-                      .map((code, i) => {
+                      .map((code, idx) => {
                         const techTech = {
                           code: code.code,
                           keyword: code.keyword,
                         };
                         return (
                           <CheckBox
-                            key={i}
-                            checked={area?.job_codes?.filter((datas) => datas === code.code).length ? true : false}
+                            key={idx}
+                            checked={!!area?.job_codes?.filter((datas) => datas === code.code).length}
                             onClick={() => CheckArray(techTech)}
                           >
                             {code.keyword}

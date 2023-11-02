@@ -3,8 +3,8 @@ export interface IUpdateCompanyInfoRequest {
   representative_name: string;
   main_zip_code: string;
   sub_zip_code?: string;
-  main_address?: string;
-  main_address_detail?: string;
+  main_address: string;
+  main_address_detail: string;
   sub_address?: string;
   sub_address_detail?: string;
   take: number;
@@ -43,7 +43,7 @@ export interface IMyCompanyResponse {
   type: string;
   take: number;
   main_address: string;
-  main_address_detail?: string;
+  main_address_detail: string;
   main_zip_code: string;
   sub_address?: string;
   sub_address_detail?: string;

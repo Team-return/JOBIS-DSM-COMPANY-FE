@@ -27,7 +27,7 @@ export default function EditMyPage() {
     main_zip_code: "",
     sub_zip_code: undefined,
     main_address: "",
-    main_address_detail: undefined,
+    main_address_detail: "",
     sub_address: undefined,
     sub_address_detail: undefined,
     take: 0,
@@ -233,7 +233,9 @@ const Container = styled.div`
 `;
 
 const Logo = styled(Image)`
-  border: 1px solid ${theme.color.gray40};
+  padding: 8px;
+  border-radius: 8px;
+  box-shadow: 0px 4px 20px 0px rgba(112, 144, 176, 0.15);
 `;
 
 const CompanyType = styled.div<{ color?: string }>`

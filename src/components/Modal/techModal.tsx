@@ -82,7 +82,7 @@ const TechModal = () => {
                 <>
                   <BigCard
                     key={idx}
-                    colorBool={techList.filter((datas) => datas.code === res.code).length ? true : false}
+                    colorBool={!!techList.filter((datas) => datas.code === res.code).length}
                     onClick={() => {
                       CheckArray(tech);
                     }}

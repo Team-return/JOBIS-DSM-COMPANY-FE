@@ -3,7 +3,7 @@
 import { useMyCompanyInfo, useUpdateCompanyInfo } from "@/hooks/apis/useCompanyApi";
 import { HStack, Stack, Text, VStack, theme } from "@team-return/design-system";
 import Image from "next/image";
-import { styled } from "styled-components";
+import styled from "styled-components";
 import { Spinner } from "@/components/Spinner";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
@@ -13,12 +13,7 @@ import DaumPostcode, { Address } from "react-daum-postcode";
 import Modal from "@/components/Modal";
 import { useModalStateStore } from "@/store/modalStore";
 import { useModal } from "@/hooks/useModal";
-
-const companyType = {
-  LEAD: "선도기업",
-  PARTICIPATING: "참여기업",
-  "": "",
-};
+import { companyType } from "@/utils/translate";
 
 export default function EditMyPage() {
   const { data: myCompany, isLoading } = useMyCompanyInfo();
@@ -129,7 +124,7 @@ export default function EditMyPage() {
           <HStack gap={14}>
             <CancelButton onClick={() => router.push("/mypage")}>취소</CancelButton>
             <SaveButton
-              onClick={async () => {
+              onClick={() => {
                 mutate(myCompany!.company_id);
               }}
             >

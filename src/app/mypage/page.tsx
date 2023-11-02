@@ -9,12 +9,7 @@ import { useState } from "react";
 import OutsideClickHandler from "react-outside-click-handler";
 import { useRouter } from "next/navigation";
 import { Cookies } from "react-cookie";
-
-const companyType = {
-  LEAD: "선도기업",
-  PARTICIPATING: "참여기업",
-  "": "",
-};
+import { companyType } from "@/utils/translate";
 
 export default function MyPage() {
   const { data: myCompany, isLoading } = useMyCompanyInfo();

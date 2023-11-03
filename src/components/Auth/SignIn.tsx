@@ -81,6 +81,7 @@ export default function SignIn() {
             placeholder="사업자 번호를 입력해주세요"
             maxLength={12}
             onChange={onChange}
+            autoComplete="off"
           />
         )}
         <InfoImg

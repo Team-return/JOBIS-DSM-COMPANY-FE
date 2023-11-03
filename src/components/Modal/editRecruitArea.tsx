@@ -15,7 +15,7 @@ interface IPropsType {
   setForm: Dispatch<SetStateAction<IEditRecruitmentRequest>>;
 }
 
-const EditRecruitArea = ({ setForm }: IPropsType) => {
+const EditRecruitAreaModal = ({ setForm }: IPropsType) => {
   const { data: jobs } = useGetCode("JOB");
   const { data: techs } = useGetCode("TECH");
   const { closeModal } = useModal();
@@ -38,7 +38,7 @@ const EditRecruitArea = ({ setForm }: IPropsType) => {
         job_codes: area.job_codes,
       });
     }
-  }, [myRecruitment]);
+  }, [myRecruitment, area.id, area.hiring, area.job_codes, area.major_task, area.tech_codes, setArea]);
 
   const PushArray = (tech: ICode) => {
     setArea({ ...area, job_codes: [...area.job_codes, tech.code] });
@@ -180,7 +180,7 @@ const EditRecruitArea = ({ setForm }: IPropsType) => {
   );
 };
 
-export default EditRecruitArea;
+export default EditRecruitAreaModal;
 
 const Container = styled.div`
   width: 700px;

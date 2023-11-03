@@ -1,11 +1,11 @@
 import { styled } from "styled-components";
-import React, { ChangeEvent, ReactNode, SetStateAction, useCallback, useRef } from "react";
+import React, { ChangeEvent, InputHTMLAttributes, ReactNode, SetStateAction, useCallback, useRef } from "react";
 import { VStack } from "@team-return/design-system";
 import Files from "./File";
 import { IFiles } from "../Auth/Register";
 import { ICompanyRegisterRequest } from "@/apis/company/types";
 
-interface InputProps {
+interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   title?: string;
   required?: boolean;
   name?: string;
@@ -17,7 +17,7 @@ interface InputProps {
 interface LineInputProps extends InputProps {
   unit?: string;
   maxLength?: number;
-  value?: string | number | null;
+  // value?: string | number | null;
   placeholder?: string;
   onChange: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
 }
@@ -43,6 +43,8 @@ export const Input = ({
   disabled,
   maxLength,
   unit,
+  autoComplete = "off",
+  ...props
 }: LineInputProps) => {
   return (
     <InputContainer>
@@ -60,6 +62,8 @@ export const Input = ({
           value={value || ""}
           onChange={onChange}
           placeholder={placeholder}
+          autoComplete={autoComplete}
+          {...props}
         />
         <UnitText>{unit}</UnitText>
         {!!button && button}

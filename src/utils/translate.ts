@@ -12,3 +12,9 @@ export const hiringProgressType: Record<IHiringProgress, string> = {
   FINAL_INTERVIEW: "최종면접",
   "": "",
 };
+
+export const companyType = {
+  LEAD: "선도기업",
+  PARTICIPATING: "참여기업",
+  "": "",
+};

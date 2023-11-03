@@ -20,10 +20,10 @@ const ProgressModal = () => {
     <Container>
       <Title>채용 방법 선택</Title>
       <Wrapper>
-        {progressList.map((progress, i) => {
+        {progressList.map((progress, idx) => {
           const { isSelect, name } = progress;
           return (
-            <Card key={i} onClick={() => Select(i, name, isSelect)} isSelect={isSelect}>
+            <Card key={idx} onClick={() => Select(idx, name, isSelect)} isSelect={isSelect}>
               {name}
             </Card>
           );

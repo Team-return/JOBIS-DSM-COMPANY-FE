@@ -69,20 +69,20 @@ const GatherModal = ({ setForm }: IPropsType) => {
               <FieldTitle>응용프로그래밍</FieldTitle>
             </FieldTitleWrapper>
             <div>
-              {jobType.map((type, i) => {
+              {jobType.map((type, idx) => {
                 return (
-                  <FieldWrapper key={i}>
+                  <FieldWrapper key={idx}>
                     <Field>
                       {jobs?.codes
                         .filter((code) => code.job_type === type)
-                        .map((code, i) => {
+                        .map((code, idx) => {
                           const techTech = {
                             code: code.code,
                             keyword: code.keyword,
                           };
                           return (
                             <JobCard
-                              key={i}
+                              key={idx}
                               colorBool={area.job_codes.filter((datas) => datas === code.code).length ? true : false}
                               onClick={() => CheckArray(techTech)}
                             >
@@ -103,10 +103,10 @@ const GatherModal = ({ setForm }: IPropsType) => {
           </Title>
           <ContentsText>필요한 기술 스택을 추가하세요.</ContentsText>
           <CardWrapper>
-            {techList.map((res, i) => {
+            {techList.map((res, idx) => {
               return (
                 <>
-                  <Card key={i}>
+                  <Card key={idx}>
                     {res.keyword}
                     <XText onClick={() => Delete(res.code)}>x</XText>
                   </Card>
@@ -148,7 +148,7 @@ const GatherModal = ({ setForm }: IPropsType) => {
           </SmallWrapper>
         </BigWrapper>
         <BtnWrapper>
-          <CancleBtn
+          <CancelBtn
             onClick={() => {
               closeModal();
               resetArea();
@@ -156,7 +156,7 @@ const GatherModal = ({ setForm }: IPropsType) => {
             }}
           >
             취소
-          </CancleBtn>
+          </CancelBtn>
           <SuccessBtn
             onClick={() => {
               setForm((prev) => ({ ...prev, areas: [...prev.areas, area] }));
@@ -253,7 +253,7 @@ const BtnWrapper = styled.div`
   justify-content: center;
 `;
 
-const CancleBtn = styled.button`
+const CancelBtn = styled.button`
   background: #ffffff;
   border: 1.5px solid #0f4c82;
   color: #0f4c82;

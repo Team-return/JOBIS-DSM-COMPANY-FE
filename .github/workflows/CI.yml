@@ -9,7 +9,7 @@ on:
       - "main"
   pull_request:
     branches:
-      - "develop"
+      - "main"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}

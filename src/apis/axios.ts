@@ -29,13 +29,14 @@ instance.interceptors.response.use(
   async (response) => response,
   async (error: AxiosError<AxiosError>) => {
     if (axios.isAxiosError(error) && error.response) {
-      const {
-        config,
-        response: { status },
-      } = error;
+      const { config } = error;
       const refreshToken = cookie.get("refresh_token");
 
-      if (error.response.data.message === "Invalid Token" || status === 403) {
+      if (
+        error.response.data.message === "Invalid Token" ||
+        error.response.data.message === "Token Expired" ||
+        error.message === "Request failed with status code 403"
+      ) {
         const originalRequest = config;
 
         if (refreshToken) {
@@ -50,14 +51,16 @@ instance.interceptors.response.use(
               return axios(originalRequest!);
             })
             .catch(() => {
-              cookie.remove("access_token");
-              cookie.remove("refresh_token");
-              window.location.href = "/login";
+              if (error.response?.data.status === 404 || error.response?.data.status === 401) {
+                cookie.remove("access_token");
+                cookie.remove("refresh_token");
+                window.location.href = "/login";
+              }
             });
         } else {
-          window.location.href = "/login";
           cookie.remove("access_token");
           cookie.remove("refresh_token");
+          window.location.href = "/login";
         }
       } else return Promise.reject(error);
     }

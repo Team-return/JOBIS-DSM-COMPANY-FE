@@ -8,6 +8,7 @@ export type ModalType =
   | "GATHER_FIELD"
   | "USE_TECH"
   | "LICENSE"
+  | "EDIT_RECRUIT_AREA"
   | "";
 
 export interface IModalState {

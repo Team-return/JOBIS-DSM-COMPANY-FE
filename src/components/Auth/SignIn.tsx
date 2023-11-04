@@ -14,12 +14,14 @@ import { useRouter } from "next/navigation";
 import { useLogin } from "@/hooks/apis/useLoginApi";
 import { regex } from "../../utils/regex";
 import cookie from "react-cookies";
+import { useToastStore } from "@team-return/design-system";
 
 export default function SignIn() {
   const router = useRouter();
   const { form, onChange, setForm } = useInput({ id: "", pw: "", isNext: false, isExist: false });
   const { id, pw, isNext, isExist } = form;
   const [hover, setHover] = useState(true);
+  const { append } = useToastStore();
 
   const CheckCompany = useMutation(() => checkBusinessNumber(id), {
     onSuccess: (res) => {
@@ -38,7 +40,7 @@ export default function SignIn() {
         cookie.remove("access_token");
       }
       if (err?.request.status === 404) {
-        alert("존재하지 않는 기업입니다.");
+        append({ type: "RED", message: "존재하지 않는 기업입니다." });
       }
     },
   });

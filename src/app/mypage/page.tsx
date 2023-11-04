@@ -95,7 +95,7 @@ export default function MyPage() {
             <Title>회사소개</Title>
             <Stack margin={["top", 10]}>
               <Text color="gray90" size="Body1">
-                {myCompany?.company_introduce}
+                {myCompany?.company_introduce || "-"}
               </Text>
             </Stack>
           </Stack>
@@ -113,7 +113,7 @@ export default function MyPage() {
           <Title>지점 주소</Title>
           <Stack align="center" height={45}>
             <Text color="gray90" size="Body1">
-              {(myCompany?.sub_address || "") + " " + (myCompany?.sub_address_detail || "")}
+              {(myCompany?.sub_address || "-") + " " + (myCompany?.sub_address_detail || "")}
             </Text>
           </Stack>
         </HStack>
@@ -124,7 +124,7 @@ export default function MyPage() {
 
               <Stack align="center" height={45}>
                 <Text color="gray90" size="Body1">
-                  {myCompany?.representative}
+                  {myCompany?.representative || "-"}
                 </Text>
               </Stack>
             </HStack>
@@ -133,7 +133,7 @@ export default function MyPage() {
 
               <Stack align="center" height={45}>
                 <Text color="gray90" size="Body1">
-                  {myCompany?.founded_at}
+                  {myCompany?.founded_at || "-"}
                 </Text>
               </Stack>
             </HStack>
@@ -142,7 +142,7 @@ export default function MyPage() {
 
               <Stack align="center" height={45}>
                 <Text color="gray90" size="Body1">
-                  {myCompany?.manager_name}
+                  {myCompany?.manager_name || "-"}
                 </Text>
               </Stack>
             </HStack>
@@ -151,7 +151,7 @@ export default function MyPage() {
 
               <Stack align="center" height={45}>
                 <Text color="gray90" size="Body1">
-                  {myCompany?.sub_manager_name}
+                  {myCompany?.sub_manager_name || "-"}
                 </Text>
               </Stack>
             </HStack>
@@ -160,7 +160,7 @@ export default function MyPage() {
 
               <Stack align="center" height={45}>
                 <Text color="gray90" size="Body1">
-                  {myCompany?.email}
+                  {myCompany?.email || "-"}
                 </Text>
               </Stack>
             </HStack>
@@ -170,7 +170,7 @@ export default function MyPage() {
               <Title>사업자번호</Title>
               <Stack align="center" height={45}>
                 <Text color="gray90" size="Body1">
-                  {buisness_number(myCompany?.biz_no || "")}
+                  {buisness_number(myCompany?.biz_no || "-")}
                 </Text>
               </Stack>
             </HStack>
@@ -178,7 +178,7 @@ export default function MyPage() {
               <Title>근로자 수</Title>
               <Stack align="center" height={45}>
                 <Text color="gray90" size="Body1">
-                  {myCompany?.workers_count}
+                  {myCompany?.workers_count || "-"}
                 </Text>
               </Stack>
             </HStack>
@@ -194,7 +194,7 @@ export default function MyPage() {
               <Title>전화번호2</Title>
               <Stack align="center" height={45}>
                 <Text color="gray90" size="Body1">
-                  {phone_number(myCompany?.sub_manager_phone_no || "")}
+                  {phone_number(myCompany?.sub_manager_phone_no || "") || "-"}
                 </Text>
               </Stack>
             </HStack>
@@ -202,7 +202,7 @@ export default function MyPage() {
               <Title>팩스</Title>
               <Stack align="center" height={45}>
                 <Text color="gray90" size="Body1">
-                  {myCompany?.fax}
+                  {myCompany?.fax || "-"}
                 </Text>
               </Stack>
             </HStack>

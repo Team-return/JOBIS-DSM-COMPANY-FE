@@ -14,12 +14,14 @@ import { useRouter } from "next/navigation";
 import { useLogin } from "@/hooks/apis/useLoginApi";
 import { regex } from "../../utils/regex";
 import cookie from "react-cookies";
+import { useToastStore } from "@team-return/design-system";
 
 export default function SignIn() {
   const router = useRouter();
   const { form, onChange, setForm } = useInput({ id: "", pw: "", isNext: false, isExist: false });
   const { id, pw, isNext, isExist } = form;
   const [hover, setHover] = useState(true);
+  const { append } = useToastStore();
 
   const CheckCompany = useMutation(() => checkBusinessNumber(id), {
     onSuccess: (res) => {

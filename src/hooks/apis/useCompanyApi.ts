@@ -16,6 +16,12 @@ export const useCompanyRegister = (body: ICompanyRegisterRequest) => {
         message: "가입에 성공하였습니다",
       });
     },
+    onError: () => {
+      append({
+        type: "RED",
+        message: "가입에 실패하였습니다",
+      });
+    },
   });
 };
 

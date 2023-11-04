@@ -43,6 +43,12 @@ export const useUpdateRecruitment = (body: IEditRecruitmentRequest) => {
       });
       queryClient.invalidateQueries(["myRecruit"]);
     },
+    onError: () => {
+      append({
+        type: "RED",
+        message: "수정에 실패하였습니다",
+      });
+    },
   });
 };
 

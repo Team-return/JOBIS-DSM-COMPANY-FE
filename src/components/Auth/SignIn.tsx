@@ -38,7 +38,7 @@ export default function SignIn() {
         cookie.remove("access_token");
       }
       if (err?.request.status === 404) {
-        alert("존재하지 않는 기업입니다.");
+        append({ type: "RED", message: "존재하지 않는 기업입니다." });
       }
     },
   });

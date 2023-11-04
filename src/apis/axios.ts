@@ -51,7 +51,7 @@ instance.interceptors.response.use(
               return axios(originalRequest!);
             })
             .catch(() => {
-              if (error.response?.status === 404 || error.response?.status === 401) {
+              if (error.response?.data.status === 404 || error.response?.data.status === 401) {
                 cookie.remove("access_token");
                 cookie.remove("refresh_token");
                 window.location.href = "/login";

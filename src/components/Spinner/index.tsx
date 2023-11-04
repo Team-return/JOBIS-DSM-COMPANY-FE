@@ -23,20 +23,20 @@ export const Spinner = ({ size = 180, position, isMessage }: LoadingProps) => {
   }, [message]);
 
   return (
-    <_Wrapper pos={position ?? "center"}>
+    <_Wrapper $pos={position ?? "center"}>
       <Img size={size} src={LoadingImg} alt="" unoptimized />
       {isMessage && <Text margin={[28, 0]} color="blue" size="Body1">{`Loading${".".repeat(message)}`}</Text>}
     </_Wrapper>
   );
 };
 
-const _Wrapper = styled.div<{ pos?: positionType }>`
+const _Wrapper = styled.div<{ $pos?: positionType }>`
   width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: ${({ pos }) => pos};
-  align-items: ${({ pos }) => pos};
+  justify-content: ${({ $pos }) => $pos};
+  align-items: ${({ $pos }) => $pos};
 `;
 
 const Img = styled(Image)<LoadingProps>`

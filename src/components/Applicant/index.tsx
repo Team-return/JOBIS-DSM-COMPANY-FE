@@ -31,11 +31,16 @@ export const Applicant = () => {
         지원자 현황
       </Text>
       <Grid>
-        {data?.applications.map((res, i) => {
+        {data?.applications.map((res, idx) => {
           return (
-            <ApplicationContainer key={i}>
+            <ApplicationContainer key={idx}>
               <Stack align="center">
-                <ProfileImg src={res.profile_image_url} width={50} height={50} alt="" unoptimized />
+                <ProfileImg
+                  src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/${res.profile_image_url}`}
+                  width={50}
+                  height={50}
+                  alt=""
+                />
                 <VStack margin={["left", 15]}>
                   <Text size="Body3">{res.student_name}</Text>
                   <Text size="Body4" color="gray60">

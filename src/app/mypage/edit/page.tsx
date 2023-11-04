@@ -350,7 +350,6 @@ const TextArea = styled.textarea`
   outline: 0;
   border: 1px solid #cccccc;
   border-radius: 2px;
-  resize: none;
   font-size: 18px;
   font-weight: 400;
   padding: 10px 15px;

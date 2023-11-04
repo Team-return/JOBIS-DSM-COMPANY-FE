@@ -2,7 +2,7 @@
 
 import React from "react";
 import { styled } from "styled-components";
-import { DropDown, Stack } from "@team-return/design-system";
+import { CheckBox, DropDown, Stack, theme } from "@team-return/design-system";
 import DaumPostcode from "react-daum-postcode";
 import { CustomInput, FileInput, Input, TextArea } from "../Input";
 import OptionTitle from "../OptionTitle";
@@ -251,6 +251,7 @@ export default function Register() {
         onUploadImage={onUploadImage}
         messages={["파일은 최대 10MB를 초과 할 수 없고, 1개만 첨부할 수 있습니다.\n이미지 파일만 업로드 가능합니다."]}
         title="회사 로고"
+        required
       />
       <FileInput
         setForm={setForm}
@@ -267,6 +268,15 @@ export default function Register() {
       />
 
       <OptionTitle title="개인정보 수집 및 이용 안내" />
+      <iframe
+        src="https://jobis-webview.team-return.com/sign-up-policy"
+        width="100%"
+        height={300}
+        style={{ marginBottom: 20 }}
+      ></iframe>
+      <div style={{ width: "100%", marginBottom: 20 }}>
+        <CheckBox margin={["right", "auto"]}>개인정보 수집에 동의합니다</CheckBox>
+      </div>
 
       <Stack gap={30}>
         <CancelButton>취소</CancelButton>
@@ -348,28 +358,21 @@ const SearchButton = styled.button`
   }
 `;
 
-const CancelButton = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100px;
-  height: 40px;
-  border: 1.5px solid #0f4c82;
+const CancelButton = styled.button`
+  padding: 12px 40px;
   border-radius: 3px;
+  border: 1.5px solid #0f4c82;
+  border-radius: 8px;
   color: #0f4c82;
-  font-weight: 400;
+  ${theme.font.Body2};
   cursor: pointer;
 `;
 
-const ConfirmRequestButton = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 150px;
-  height: 40px;
-  border-radius: 3px;
-  background-color: #0f4c82;
-  font-weight: 400;
-  color: white;
+const ConfirmRequestButton = styled.button`
+  padding: 12px 40px;
+  border-radius: 8px;
+  background-color: ${theme.color.blue};
+  ${theme.font.Body2};
+  color: ${theme.color.gray10};
   cursor: pointer;
 `;

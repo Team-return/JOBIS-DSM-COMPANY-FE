@@ -1,42 +1,223 @@
 import { IRecruitment } from "@/apis/recruitments/types";
 import { useModal } from "@/hooks/useModal";
-import { Button, HStack, Input } from "@team-return/design-system";
-import React, { Dispatch, SetStateAction, useState } from "react";
+import React, { ChangeEvent, Dispatch, SetStateAction, useState } from "react";
+import { Icon, theme } from "@team-return/design-system";
+import styled from "styled-components";
+import { useGetRequiredLicensesList } from "@/apis/openai";
 
 interface PropsType {
+  requiredLicensesArray: string[];
   setForm: Dispatch<SetStateAction<IRecruitment>>;
 }
 
-const LicenseModal = ({ setForm }: PropsType) => {
-  const [license, setLicense] = useState("");
+const LicenseModal = ({ setForm, requiredLicensesArray }: PropsType) => {
   const { closeModal } = useModal();
+  const [search, setSearch] = useState("");
+  const { data: requiredLicenses } = useGetRequiredLicensesList(1, 1972);
+  const requiredLicensesNames = requiredLicenses?.data.map((requiredLicense) => requiredLicense.종목명);
+  const requiredLicensesFilteringData = requiredLicensesNames?.filter(
+    (requiredLicense, i) => requiredLicensesNames?.indexOf(requiredLicense) === i
+  );
 
-  const Search = () => {
-    setForm((prev) => ({ ...prev, required_licenses: [...prev.required_licenses, license] }));
-    setLicense("");
-    closeModal();
+  const CheckArray = (requiredLicenseName: string) => {
+    !requiredLicensesArray.includes(requiredLicenseName)
+      ? setForm((recruitmentFormDetailInfo) => ({
+          ...recruitmentFormDetailInfo,
+          required_licenses: [...requiredLicensesArray, requiredLicenseName],
+        }))
+      : setForm((recruitmentFormDetailInfo) => ({
+          ...recruitmentFormDetailInfo,
+          required_licenses: requiredLicensesArray.filter((requiredLicense) => requiredLicense !== requiredLicenseName),
+        }));
+  };
+
+  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setSearch(e.target.value);
   };
 
   return (
-    <>
-      <HStack justify="center" align="center" height={200}>
-        <Input
-          placeholder="자격증을 입력해주세요"
-          width={50}
-          value={license}
-          onChange={(e) => {
-            setLicense(e.target.value);
-          }}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              Search();
-            }
-          }}
-        />
-        <Button onClick={Search}>완료</Button>
-      </HStack>
-    </>
+    <Container>
+      <TitleWrapper>
+        <div>
+          <Title>국가자격증 선택</Title>
+          <ContentsText>해당 직무에 필요한 국가자격증을 선택하세요.</ContentsText>
+        </div>
+        <InputWrapper>
+          <SearchInput type="text" value={search} onChange={onChange} />
+          <SearchIcon icon="Search" />
+        </InputWrapper>
+      </TitleWrapper>
+      <SmallCardWrapper>
+        {requiredLicensesArray.map((license, idx) => {
+          return (
+            <SmallCard key={idx}>
+              {license}
+              <XCardText onClick={() => CheckArray(license)}>x</XCardText>
+            </SmallCard>
+          );
+        })}
+      </SmallCardWrapper>
+      <MaxSize>
+        <BigCardWrapper>
+          {requiredLicensesFilteringData
+            ?.filter((datas) => datas.includes(search))
+            .map((license, idx) => {
+              return (
+                <BigCard
+                  key={idx}
+                  colorBool={requiredLicensesArray.includes(license)}
+                  onClick={() => {
+                    CheckArray(license);
+                  }}
+                >
+                  {license}
+                </BigCard>
+              );
+            })}
+        </BigCardWrapper>
+      </MaxSize>
+      <Btn onClick={closeModal}>완료</Btn>
+    </Container>
   );
 };
 
 export default LicenseModal;
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 60px 0 20px 0;
+  border-radius: 10px;
+  background-color: white;
+`;
+
+const TitleWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 580px;
+`;
+
+const InputWrapper = styled.div`
+  position: relative;
+`;
+
+const SmallCardWrapper = styled.div`
+  display: flex;
+  overflow-x: scroll;
+  min-height: 40px;
+  gap: 5px;
+  flex-wrap: wrap;
+  padding: 10px 0;
+  padding-left: 10px;
+  width: 600px;
+  align-items: center;
+  ::-webkit-scrollbar-thumb {
+    background-color: ${theme.color.gray60};
+  }
+  ::-webkit-scrollbar-track {
+    background-color: ${theme.color.gray40};
+  }
+`;
+
+const SmallCard = styled.button`
+  border: none;
+  padding: 5px 10px;
+  background: #ffffff;
+  box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 5px;
+  height: 25px;
+  display: flex;
+  align-items: center;
+  margin-right: 7px;
+  font-size: 14px;
+  font-weight: 400;
+  color: ${theme.color.gray90};
+  outline: none;
+  white-space: nowrap;
+  cursor: default;
+`;
+
+const XCardText = styled.div`
+  margin-left: 7px;
+  margin-top: -1px;
+  cursor: pointer;
+  color: red;
+  font-size: 16px;
+`;
+
+const SearchIcon = styled(Icon)`
+  position: absolute;
+  top: 7px;
+  right: 15px;
+`;
+
+const ContentsText = styled.div`
+  font-weight: 400;
+  font-size: 14px;
+  color: #7f7f7f;
+  margin-top: 8px;
+`;
+
+const SearchInput = styled.input`
+  background: #eaeaea;
+  border: 0.5px solid #f7f7f7;
+  border-radius: 30px;
+  width: 250px;
+  height: 40px;
+  outline: none;
+  padding: 10px 50px 10px 20px;
+`;
+
+const MaxSize = styled.div`
+  height: 300px;
+`;
+
+const BigCardWrapper = styled.div`
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  padding: 5px;
+  gap: 5px;
+  max-height: 300px;
+  width: 600px;
+  margin-bottom: 20px;
+  overflow: scroll;
+`;
+
+const BigCard = styled.button<{ colorBool: boolean }>`
+  border: none;
+  width: 114px;
+  height: 76px;
+  background-color: ${(props) => (props.colorBool ? "#0F4C82" : "white")};
+  box-shadow: 0px 0px 1px 1px rgba(0, 0, 0, 0.25);
+  color: ${(props) => (props.colorBool ? "white" : "black")};
+  font-weight: 350;
+  font-size: 14px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  padding: 3px;
+  &:hover {
+    background-color: ${(props) => !props.colorBool && theme.color.gray40};
+    color: ${(props) => (props.colorBool ? "white" : "black")};
+  }
+  cursor: pointer;
+`;
+
+const Btn = styled.button`
+  width: 92px;
+  height: 40px;
+  border: 1px solid #0f4c82;
+  border-radius: 3px;
+  background-color: white;
+  color: #0f4c82;
+  cursor: pointer;
+  margin-top: 20px;
+`;
+
+const Title = styled.div`
+  font-size: 20px;
+  font-weight: 750;
+  text-align: start;
+`;

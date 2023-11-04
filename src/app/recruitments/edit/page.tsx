@@ -118,7 +118,7 @@ export default function EditRecruiment() {
           <Stack width={800}>
             <Title>모집 기간 *</Title>
             <HStack align="center" gap={20} margin={["right", 100]}>
-              <Input name="start_date" value={form.start_date} onChange={onChange} type="date" /> ~{" "}
+              <Input name="start_date" value={form.start_date} onChange={onChange} type="date" /> ~{"  "}
               <Input name="end_date" value={form.end_date} onChange={onChange} type="date" />
             </HStack>
           </Stack>

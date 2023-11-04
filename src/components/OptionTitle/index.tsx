@@ -17,9 +17,9 @@ export default OptionTitle;
 
 const OptionTitleContainer = styled.div`
   width: 100%;
-  height: 42px;
+  height: 36px;
   border-bottom: 1px solid black;
-  margin: 26px 0px;
+  margin: 24px 0px;
 `;
 
 const Title = styled.div`

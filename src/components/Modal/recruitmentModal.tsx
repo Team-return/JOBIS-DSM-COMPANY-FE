@@ -51,125 +51,123 @@ const GatherModal = ({ setForm }: IPropsType) => {
   }, []);
 
   return (
-    <>
-      <Container>
-        <BigWrapper>
-          <Title>
-            채용직무<span style={{ color: "#0087FF" }}> *</span>
-          </Title>
-          <ContentsText>아래 제시된 분야중 해당하는 분야를 선택하세요.</ContentsText>
-          <SmallWrapper>
-            <FieldTitleWrapper>
-              <FieldTitle>웹프로그래밍</FieldTitle>
-              <FieldTitle>모바일</FieldTitle>
-              <FieldTitle>게임</FieldTitle>
-              <FieldTitle>임베디드</FieldTitle>
-              <FieldTitle>보안</FieldTitle>
-              <FieldTitle>인공지능</FieldTitle>
-              <FieldTitle>응용프로그래밍</FieldTitle>
-            </FieldTitleWrapper>
-            <div>
-              {jobType.map((type, idx) => {
-                return (
-                  <FieldWrapper key={idx}>
-                    <Field>
-                      {jobs?.codes
-                        .filter((code) => code.job_type === type)
-                        .map((code, idx) => {
-                          const techTech = {
-                            code: code.code,
-                            keyword: code.keyword,
-                          };
-                          return (
-                            <JobCard
-                              key={idx}
-                              colorBool={area.job_codes.filter((datas) => datas === code.code).length ? true : false}
-                              onClick={() => CheckArray(techTech)}
-                            >
-                              {code.keyword}
-                            </JobCard>
-                          );
-                        })}
-                    </Field>
-                  </FieldWrapper>
-                );
-              })}
-            </div>
-          </SmallWrapper>
-        </BigWrapper>
-        <BigWrapper>
-          <Title>
-            사용기술<span style={{ color: "#0087FF" }}> *</span>
-          </Title>
-          <ContentsText>필요한 기술 스택을 추가하세요.</ContentsText>
-          <CardWrapper>
-            {techList.map((res, idx) => {
+    <Container>
+      <BigWrapper>
+        <Title>
+          채용직무<span style={{ color: "#0087FF" }}> *</span>
+        </Title>
+        <ContentsText>아래 제시된 분야중 해당하는 분야를 선택하세요.</ContentsText>
+        <SmallWrapper>
+          <FieldTitleWrapper>
+            <FieldTitle>웹프로그래밍</FieldTitle>
+            <FieldTitle>모바일</FieldTitle>
+            <FieldTitle>게임</FieldTitle>
+            <FieldTitle>임베디드</FieldTitle>
+            <FieldTitle>보안</FieldTitle>
+            <FieldTitle>인공지능</FieldTitle>
+            <FieldTitle>응용프로그래밍</FieldTitle>
+          </FieldTitleWrapper>
+          <div>
+            {jobType.map((type, idx) => {
               return (
-                <>
-                  <Card key={idx}>
-                    {res.keyword}
-                    <XText onClick={() => Delete(res.code)}>x</XText>
-                  </Card>
-                </>
+                <FieldWrapper key={idx}>
+                  <Field>
+                    {jobs?.codes
+                      .filter((code) => code.job_type === type)
+                      .map((code, idx) => {
+                        const techTech = {
+                          code: code.code,
+                          keyword: code.keyword,
+                        };
+                        return (
+                          <JobCard
+                            key={idx}
+                            colorBool={area.job_codes.filter((datas) => datas === code.code).length ? true : false}
+                            onClick={() => CheckArray(techTech)}
+                          >
+                            {code.keyword}
+                          </JobCard>
+                        );
+                      })}
+                  </Field>
+                </FieldWrapper>
               );
             })}
-            <AddTechButton onClick={() => openModal("USE_TECH")}>+ 추가</AddTechButton>
-          </CardWrapper>
-        </BigWrapper>
-        <BigWrapper>
-          <Title>
-            채용인원<span style={{ color: "#0087FF" }}> *</span>
-          </Title>
-          <ContentsText>채용할 인원을 입력해주세요.</ContentsText>
-          <SmallWrapper>
-            <NumInput
-              type="number"
-              min={0}
-              value={area.hiring}
-              onChange={(e) => {
-                setArea({ ...area, hiring: +e.target.value });
-              }}
-            />
-            <NumText>명</NumText>
-          </SmallWrapper>
-        </BigWrapper>
-        <BigWrapper>
-          <Title>
-            상세직무<span style={{ color: "#0087FF" }}> *</span>
-          </Title>
-          <ContentsText>해당 직무에서 하는 일을 상세하게 입력해주세요.</ContentsText>
-          <SmallWrapper>
-            <Textarea
-              ref={textRef}
-              value={area.major_task}
-              onInput={handleResizeHeight}
-              onChange={(e) => setArea({ ...area, major_task: e.target.value })}
-            />
-          </SmallWrapper>
-        </BigWrapper>
-        <BtnWrapper>
-          <CancelBtn
-            onClick={() => {
-              closeModal();
-              resetArea();
-              resetTechList();
+          </div>
+        </SmallWrapper>
+      </BigWrapper>
+      <BigWrapper>
+        <Title>
+          사용기술<span style={{ color: "#0087FF" }}> *</span>
+        </Title>
+        <ContentsText>필요한 기술 스택을 추가하세요.</ContentsText>
+        <CardWrapper>
+          {techList.map((res, idx) => {
+            return (
+              <>
+                <Card key={idx}>
+                  {res.keyword}
+                  <XText onClick={() => Delete(res.code)}>x</XText>
+                </Card>
+              </>
+            );
+          })}
+          <AddTechButton onClick={() => openModal("USE_TECH")}>+ 추가</AddTechButton>
+        </CardWrapper>
+      </BigWrapper>
+      <BigWrapper>
+        <Title>
+          채용인원<span style={{ color: "#0087FF" }}> *</span>
+        </Title>
+        <ContentsText>채용할 인원을 입력해주세요.</ContentsText>
+        <SmallWrapper>
+          <NumInput
+            type="number"
+            min={0}
+            value={area.hiring}
+            onChange={(e) => {
+              setArea({ ...area, hiring: +e.target.value });
             }}
-          >
-            취소
-          </CancelBtn>
-          <SuccessBtn
-            onClick={() => {
-              setForm((prev) => ({ ...prev, areas: [...prev.areas, area] }));
-              resetArea();
-              resetTechList();
-              closeModal();
-            }}
-          >
-            확인
-          </SuccessBtn>
-        </BtnWrapper>
-      </Container>
-    </>
+          />
+          <NumText>명</NumText>
+        </SmallWrapper>
+      </BigWrapper>
+      <BigWrapper>
+        <Title>
+          상세직무<span style={{ color: "#0087FF" }}> *</span>
+        </Title>
+        <ContentsText>해당 직무에서 하는 일을 상세하게 입력해주세요.</ContentsText>
+        <SmallWrapper>
+          <Textarea
+            ref={textRef}
+            value={area.major_task}
+            onInput={handleResizeHeight}
+            onChange={(e) => setArea({ ...area, major_task: e.target.value })}
+          />
+        </SmallWrapper>
+      </BigWrapper>
+      <BtnWrapper>
+        <CancelBtn
+          onClick={() => {
+            closeModal();
+            resetArea();
+            resetTechList();
+          }}
+        >
+          취소
+        </CancelBtn>
+        <SuccessBtn
+          onClick={() => {
+            setForm((prev) => ({ ...prev, areas: [...prev.areas, area] }));
+            resetArea();
+            resetTechList();
+            closeModal();
+          }}
+        >
+          확인
+        </SuccessBtn>
+      </BtnWrapper>
+    </Container>
   );
 };
 
@@ -177,7 +175,7 @@ export default GatherModal;
 
 const Container = styled.div`
   border: 3px solid white;
-  width: 700px;
+  width: 800px;
   padding: 50px;
   height: 80vh;
   overflow: scroll;

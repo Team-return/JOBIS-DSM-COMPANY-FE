@@ -10,12 +10,14 @@ import OutsideClickHandler from "react-outside-click-handler";
 import { useRouter } from "next/navigation";
 import { Cookies } from "react-cookie";
 import { companyType } from "@/utils/translate";
+import { regex } from "@/utils/regex";
 
 export default function MyPage() {
   const { data: myCompany, isLoading } = useMyCompanyInfo();
   const [dropdown, setDropDown] = useState(false);
   const router = useRouter();
   const cookie = new Cookies();
+  const { phone_number, buisness_number } = regex;
 
   if (isLoading)
     return (
@@ -91,7 +93,7 @@ export default function MyPage() {
         <HStack>
           <Stack width={940}>
             <Title>회사소개</Title>
-            <Stack align="center" height={45}>
+            <Stack margin={["top", 10]}>
               <Text color="gray90" size="Body1">
                 {myCompany?.company_introduce}
               </Text>
@@ -168,7 +170,7 @@ export default function MyPage() {
               <Title>사업자번호</Title>
               <Stack align="center" height={45}>
                 <Text color="gray90" size="Body1">
-                  {myCompany?.biz_no}
+                  {buisness_number(myCompany?.biz_no || "")}
                 </Text>
               </Stack>
             </HStack>
@@ -184,7 +186,7 @@ export default function MyPage() {
               <Title>전화번호1</Title>
               <Stack align="center" height={45}>
                 <Text color="gray90" size="Body1">
-                  {myCompany?.manager_phone_no}
+                  {phone_number(myCompany?.manager_phone_no || "")}
                 </Text>
               </Stack>
             </HStack>
@@ -192,7 +194,7 @@ export default function MyPage() {
               <Title>전화번호2</Title>
               <Stack align="center" height={45}>
                 <Text color="gray90" size="Body1">
-                  {myCompany?.sub_manager_phone_no}
+                  {phone_number(myCompany?.sub_manager_phone_no || "")}
                 </Text>
               </Stack>
             </HStack>

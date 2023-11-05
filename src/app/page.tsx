@@ -144,7 +144,7 @@ export default function Home() {
             <HStack>
               <Title>채용 전환 연봉</Title>
               <Text color="gray90" size="Body1">
-                {myRecruitment?.pay && myRecruitment.pay + "만원"}
+                {myRecruitment?.pay ? myRecruitment.pay + "만원" : "-"}
               </Text>
             </HStack>
           </VStack>
@@ -153,7 +153,7 @@ export default function Home() {
           <Title>사내 복지</Title>
           <VStack width={800}>
             <Text color="gray90" size="Body1">
-              {myRecruitment?.benefits}
+              {myRecruitment?.benefits || "-"}
             </Text>
           </VStack>
         </HStack>
@@ -205,14 +205,14 @@ export default function Home() {
           <Title>국가 자격증</Title>
           <VStack width={800}>
             <Text color="gray90" size="Body1">
-              {myRecruitment?.required_licenses.join(", ")}
+              {myRecruitment?.required_licenses.join(", ") || "-"}
             </Text>
           </VStack>
         </HStack>
         <HStack>
           <Title>기초 성적</Title>
           <Text color="gray90" size="Body1">
-            {myRecruitment?.required_grade}
+            {myRecruitment?.required_grade || "-"}
             {myRecruitment?.required_grade && " % 이내"}
           </Text>
         </HStack>
@@ -220,7 +220,7 @@ export default function Home() {
           <Title>자격 우대사항</Title>
           <VStack width={800}>
             <Text color="gray90" size="Body1">
-              {myRecruitment?.preferential_treatment}
+              {myRecruitment?.preferential_treatment || "-"}
             </Text>
           </VStack>
         </HStack>
@@ -228,7 +228,7 @@ export default function Home() {
           <Title>기타사항</Title>
           <VStack width={800}>
             <Text color="gray90" size="Body1" whitespace="pre-line">
-              {myRecruitment?.etc}
+              {myRecruitment?.etc || "-"}
             </Text>
           </VStack>
         </HStack>

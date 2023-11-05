@@ -50,8 +50,8 @@ instance.interceptors.response.use(
               if (originalRequest!.headers) originalRequest!.headers["Authorization"] = `Bearer ${res.access_token}`;
               return axios(originalRequest!);
             })
-            .catch(() => {
-              if (error.response?.data.status === 404 || error.response?.data.status === 401) {
+            .catch((err: AxiosError<AxiosError>) => {
+              if (err.response?.data.status === 404 || err.response?.data.status === 401) {
                 cookie.remove("access_token");
                 cookie.remove("refresh_token");
                 window.location.href = "/login";

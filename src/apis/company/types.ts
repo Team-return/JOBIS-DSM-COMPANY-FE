@@ -31,6 +31,14 @@ export interface ICompanyRegisterRequest extends IUpdateCompanyInfoRequest {
   attachment_urls?: string[] | null;
 }
 
+export interface ICompanyRegisterResponse {
+  access_token: string;
+  access_expires_at: string;
+  refresh_token: string;
+  refresh_expires_at: string;
+  authority: string;
+}
+
 export interface ICheckBuisnessNumberResponse {
   company_name: string;
   exists: boolean;

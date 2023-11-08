@@ -3,18 +3,25 @@ import { ICompanyRegisterRequest, IUpdateCompanyInfoRequest } from "@/apis/compa
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useToastStore } from "@team-return/design-system";
 import { useRouter } from "next/navigation";
+import cookie from "react-cookies";
 
 export const useCompanyRegister = (body: ICompanyRegisterRequest) => {
   const router = useRouter();
   const { append } = useToastStore();
 
   return useMutation(() => companyRegister(body), {
-    onSuccess: () => {
-      router.push("/login");
+    onSuccess: (res) => {
+      const { access_token, access_expires_at, refresh_expires_at, refresh_token, authority } = res;
+      const accessTokenExpire = new Date(access_expires_at);
+      const refresTokenExpire = new Date(refresh_expires_at);
+      cookie.save("access_token", access_token, { expires: accessTokenExpire, path: "/" });
+      cookie.save("refresh_token", refresh_token, { expires: refresTokenExpire, path: "/" });
+      localStorage.setItem("authority", authority);
       append({
         type: "GREEN",
         message: "가입에 성공하였습니다",
       });
+      router.push("/");
     },
     onError: () => {
       append({

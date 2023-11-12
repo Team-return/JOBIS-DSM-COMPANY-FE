@@ -71,7 +71,7 @@ const TechModal = () => {
         <BigCardWrapper>
           {techs?.codes
             .filter((datas) => {
-              return datas.keyword.includes(search);
+              return datas.keyword.toLowerCase().includes(search.toLowerCase());
             })
             .map((res, idx) => {
               const tech = {

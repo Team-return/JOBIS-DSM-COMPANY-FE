@@ -1,16 +1,19 @@
-import { IRecruitment } from "@/apis/recruitments/types";
+import { IEditRecruitmentRequest, IRecruitment } from "@/apis/recruitments/types";
 import { useModal } from "@/hooks/useModal";
 import React, { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Icon, theme } from "@team-return/design-system";
 import styled from "styled-components";
 import { useGetRequiredLicensesList } from "@/apis/openai";
 
-interface PropsType {
+interface PropsType<T> {
   requiredLicensesArray: string[];
-  setForm: Dispatch<SetStateAction<IRecruitment>>;
+  setForm: Dispatch<SetStateAction<T>>;
 }
 
-const LicenseModal = ({ setForm, requiredLicensesArray }: PropsType) => {
+const LicenseModal = <T extends IRecruitment | IEditRecruitmentRequest>({
+  setForm,
+  requiredLicensesArray,
+}: PropsType<T>) => {
   const { closeModal } = useModal();
   const [search, setSearch] = useState("");
   const [licenses, setLicenses] = useState<string[]>([]);

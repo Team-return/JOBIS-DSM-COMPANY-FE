@@ -18,6 +18,7 @@ import EditRecruitAreaModal from "@/components/Modal/editRecruitArea";
 import { useRouter } from "next/navigation";
 import TechModal from "@/components/Modal/techModal";
 import ProgressModal from "@/components/Modal/progressModal";
+import LicenseModal from "@/components/Modal/licenseModal";
 
 export default function EditRecruiment() {
   const { data: myRecruitment, error, isLoading } = useMyRecruitment();
@@ -242,8 +243,9 @@ export default function EditRecruiment() {
         </HStack>
         <HStack>
           <Title>국가 자격증</Title>
-          <VStack width={800}>
-            <TextArea name="required_licenses" value={form.required_licenses} onChange={onChange} />
+          <VStack width={800} gap={20}>
+            <AddRecruitmentButton onClick={() => openModal("LICENSE")}>자격증 추가하기 +</AddRecruitmentButton>
+            {!!form.required_licenses.length && form.required_licenses.join(", ")}
           </VStack>
         </HStack>
         <HStack>
@@ -274,6 +276,11 @@ export default function EditRecruiment() {
       {modalState === "HIRING_PROGRESS" && (
         <Modal width={780} onClose={closeModal} closeAble>
           <ProgressModal hiringProgressArray={form.hiring_progress} setRecruitmentFormDetailInfo={setForm} />
+        </Modal>
+      )}
+      {modalState === "LICENSE" && (
+        <Modal width={700} onClose={closeModal}>
+          <LicenseModal requiredLicensesArray={form.required_licenses} setForm={setForm} />
         </Modal>
       )}
     </Container>

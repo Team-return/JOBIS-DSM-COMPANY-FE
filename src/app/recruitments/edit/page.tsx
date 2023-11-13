@@ -137,7 +137,7 @@ export default function EditRecruiment() {
             <HStack>
               <Title>실습수당 *</Title>
               <UnitInputWrapper>
-                <Input name="train_pay" value={form.train_pay} onChange={onChange} />
+                <Input name="train_pay" value={form.train_pay} onChange={onChange} autoComplete="off" />
                 <Unit>만원</Unit>
               </UnitInputWrapper>
             </HStack>
@@ -165,7 +165,7 @@ export default function EditRecruiment() {
             <HStack>
               <Title>채용 전환 연봉</Title>
               <UnitInputWrapper>
-                <Input name="pay" value={form.pay} onChange={onChange} />
+                <Input name="pay" value={form.pay} onChange={onChange} autoComplete="off" />
                 <Unit>만원</Unit>
               </UnitInputWrapper>
             </HStack>
@@ -208,7 +208,7 @@ export default function EditRecruiment() {
         <HStack>
           <Title>필요 서류 *</Title>
           <VStack width={800}>
-            <Input name="submit_document" value={form.submit_document} onChange={onChange} />
+            <Input name="submit_document" value={form.submit_document} onChange={onChange} autoComplete="off" />
           </VStack>
         </HStack>
         <HStack>
@@ -264,7 +264,7 @@ export default function EditRecruiment() {
         <HStack>
           <Title>기초 성적</Title>
           <UnitInputWrapper>
-            <Input name="required_grade" value={form.required_grade} onChange={onChange} />
+            <Input name="required_grade" value={form.required_grade} onChange={onChange} autoComplete="off" />
             <Unit>% 이내</Unit>
           </UnitInputWrapper>
         </HStack>

@@ -1,6 +1,6 @@
 "use client";
 
-import { styled } from "styled-components";
+import { css, styled } from "styled-components";
 import { Stack, theme } from "@team-return/design-system";
 import { DragDropContext, Draggable, DropResult, Droppable } from "react-beautiful-dnd";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
@@ -184,8 +184,12 @@ const Card = styled.div<{ isSelect: boolean }>`
   border-radius: 8px;
   cursor: pointer;
   &:hover {
-    border: 1.5px solid ${({ isSelect }) => (isSelect ? null : theme.color.gray60)};
-    color: ${({ isSelect }) => (isSelect ? null : theme.color.gray70)};
+    ${({ isSelect }) =>
+      !isSelect &&
+      css`
+        border: 1.5px solid ${theme.color.gray60};
+        color: ${theme.color.gray70};
+      `}
   }
 `;
 

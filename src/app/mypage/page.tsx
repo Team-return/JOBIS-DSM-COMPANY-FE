@@ -93,7 +93,7 @@ export default function MyPage() {
         <HStack>
           <Stack width={940}>
             <Title>회사소개</Title>
-            <Stack margin={["top", 10]}>
+            <Stack width={780} margin={["top", 10]}>
               <Text color="gray90" size="Body1">
                 {myCompany?.company_introduce || "-"}
               </Text>

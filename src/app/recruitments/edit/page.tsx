@@ -1,16 +1,14 @@
 "use client";
 
 import { useMyRecruitment, useUpdateRecruitment } from "@/hooks/apis/useRecruitmentsApi";
-import { CheckBox, HStack, Icon, RadioButton, Stack, Text, VStack, theme } from "@team-return/design-system";
+import { HStack, Icon, RadioButton, Stack, Text, VStack, theme } from "@team-return/design-system";
 import Image from "next/image";
 import { styled } from "styled-components";
 import { useEffect } from "react";
 import { useInput } from "@/hooks/useInput";
-import { IEditRecruitmentRequest, IHiringProgress } from "@/apis/recruitments/types";
+import { IEditRecruitmentRequest } from "@/apis/recruitments/types";
 import { hiringProgressType } from "@/utils/translate";
-import { useModalStateStore } from "@/store/modalStore";
 import { useModal } from "@/hooks/useModal";
-
 import { useAreaState } from "@/store/areasState";
 import { useGetCode } from "@/hooks/apis/useCodeApi";
 import Modal from "@/components/Modal";
@@ -18,19 +16,20 @@ import { Spinner } from "@/components/Spinner";
 import { NoResult } from "@/components/Recruitments/NoResult";
 import EditRecruitAreaModal from "@/components/Modal/editRecruitArea";
 import { useRouter } from "next/navigation";
+import TechModal from "@/components/Modal/techModal";
+import ProgressModal from "@/components/Modal/progressModal";
 
 export default function EditRecruiment() {
   const { data: myRecruitment, error, isLoading } = useMyRecruitment();
-  const { modalState } = useModalStateStore();
-  const { closeModal, openModal } = useModal();
+  const { closeModal, openModal, modalState } = useModal();
   const { data: jobs } = useGetCode("JOB");
   const { data: techs } = useGetCode("TECH");
 
   const { form, setForm, onChange } = useInput<IEditRecruitmentRequest>({
-    preferential_treatment: "",
     required_grade: undefined,
     required_licenses: [],
-    work_hours: "",
+    start_time: "",
+    end_time: "",
     train_pay: "",
     pay: "",
     benefits: "",
@@ -47,10 +46,10 @@ export default function EditRecruiment() {
   useEffect(() => {
     if (myRecruitment) {
       setForm({
-        preferential_treatment: myRecruitment.preferential_treatment,
         required_grade: myRecruitment.required_grade,
         required_licenses: myRecruitment.required_licenses,
-        work_hours: myRecruitment.work_hours,
+        start_time: myRecruitment.start_time,
+        end_time: myRecruitment.end_time,
         train_pay: myRecruitment.train_pay,
         pay: myRecruitment.pay,
         benefits: myRecruitment.benefits,
@@ -118,7 +117,7 @@ export default function EditRecruiment() {
           <Stack width={800}>
             <Title>모집 기간 *</Title>
             <HStack align="center" gap={20} margin={["right", 100]}>
-              <Input name="start_date" value={form.start_date} onChange={onChange} type="date" /> ~{"  "}
+              <Input name="start_date" value={form.start_date} onChange={onChange} type="date" /> {" ~ "}
               <Input name="end_date" value={form.end_date} onChange={onChange} type="date" />
             </HStack>
           </Stack>
@@ -129,8 +128,9 @@ export default function EditRecruiment() {
               <Title>근무시간 *</Title>
               <Stack>
                 <UnitInputWrapper>
-                  <Input name="work_hours" value={form.work_hours} onChange={onChange} />
-                  <Unit>시간</Unit>
+                  <Input name="start_time" type="time" value={form.start_time} onChange={onChange} />
+                  {" ~ "}
+                  <Input name="end_time" type="time" value={form.end_time} onChange={onChange} />
                 </UnitInputWrapper>
               </Stack>
             </HStack>
@@ -179,30 +179,10 @@ export default function EditRecruiment() {
         </HStack>
         <HStack>
           <Title>채용 절차 *</Title>
-          <VStack width={800}>
-            <HiringProgressGrid>
-              {Object.entries(hiringProgressType)
-                .filter((hiringProgress) => hiringProgress[1] !== "")
-                .map((hiringProgress, idx) => (
-                  <CheckBox
-                    key={idx}
-                    checked={form.hiring_progress.includes(hiringProgress[0] as IHiringProgress)}
-                    onClick={() =>
-                      form.hiring_progress.includes(hiringProgress[0] as IHiringProgress)
-                        ? setForm({
-                            ...form,
-                            hiring_progress: form.hiring_progress.filter((progress) => progress !== hiringProgress[0]),
-                          })
-                        : setForm({
-                            ...form,
-                            hiring_progress: [...form.hiring_progress, hiringProgress[0] as IHiringProgress],
-                          })
-                    }
-                  >
-                    {hiringProgress[1]}
-                  </CheckBox>
-                ))}
-            </HiringProgressGrid>
+          <VStack width={800} gap={20}>
+            <AddRecruitmentButton onClick={() => openModal("HIRING_PROGRESS")}>절차 추가하기 +</AddRecruitmentButton>
+            {!!form.hiring_progress.length &&
+              form.hiring_progress.map((progress) => hiringProgressType[progress]).join(" → ")}
           </VStack>
         </HStack>
         <HStack>
@@ -237,6 +217,7 @@ export default function EditRecruiment() {
                             ),
                             hiring: area.hiring,
                             major_task: area.major_task,
+                            preferential_treatment: area.preferential_treatment,
                           });
                         }}
                       />
@@ -250,7 +231,11 @@ export default function EditRecruiment() {
                 </AreaBox>
               );
             })}
-            <PlusIconBackground>
+            <PlusIconBackground
+              onClick={() => {
+                openModal("EDIT_RECRUIT_AREA");
+              }}
+            >
               <Icon icon="Plus" color="liteBlue" size={24} />
             </PlusIconBackground>
           </Stack>
@@ -268,12 +253,7 @@ export default function EditRecruiment() {
             <Unit>% 이내</Unit>
           </UnitInputWrapper>
         </HStack>
-        <HStack>
-          <Title>자격 우대사항</Title>
-          <VStack width={800}>
-            <TextArea name="preferential_treatment" value={form.preferential_treatment} onChange={onChange} />
-          </VStack>
-        </HStack>
+
         <HStack>
           <Title>기타사항</Title>
           <VStack width={800}>
@@ -284,6 +264,16 @@ export default function EditRecruiment() {
       {modalState === "EDIT_RECRUIT_AREA" && (
         <Modal width={700} onClose={closeModal} closeAble>
           <EditRecruitAreaModal setForm={setForm} />
+        </Modal>
+      )}
+      {modalState === "USE_TECH" && (
+        <Modal width={700} onClose={() => openModal("GATHER_FIELD")} closeAble>
+          <TechModal />
+        </Modal>
+      )}
+      {modalState === "HIRING_PROGRESS" && (
+        <Modal width={780} onClose={closeModal} closeAble>
+          <ProgressModal hiringProgressArray={form.hiring_progress} setRecruitmentFormDetailInfo={setForm} />
         </Modal>
       )}
     </Container>
@@ -326,7 +316,7 @@ const Title = styled.div`
 const Grid = styled.div`
   width: 100%;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1.2fr 1fr;
 `;
 
 const LoadingContainer = styled.div`
@@ -407,14 +397,9 @@ const UnitInputWrapper = styled.div`
   position: relative;
   display: flex;
   align-items: center;
+  width: 330px;
   cursor: default;
-`;
-
-const HiringProgressGrid = styled.div`
-  width: 100%;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 30px;
+  gap: 5px;
 `;
 
 const AreaBox = styled.div`
@@ -452,4 +437,17 @@ const PlusIconBackground = styled(EditIconBackground)`
   border: 1px solid ${theme.color.liteBlue};
   border-radius: 50px;
   background-color: ${theme.color.gray10};
+`;
+
+const AddRecruitmentButton = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid ${theme.color.gray50};
+  margin-top: 10px;
+  color: ${theme.color.gray60};
+  padding: 8px 20px;
+  border-radius: 8px;
+  ${theme.font.Body3};
+  cursor: pointer;
 `;

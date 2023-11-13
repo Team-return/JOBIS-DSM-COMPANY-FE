@@ -1,8 +1,8 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { styled } from "styled-components";
-import { CheckBox, DropDown, Stack, theme } from "@team-return/design-system";
+import { CheckBox, DropDown, Stack, theme, useToastStore } from "@team-return/design-system";
 import DaumPostcode from "react-daum-postcode";
 import { CustomInput, FileInput, Input, TextArea } from "../Input";
 import OptionTitle from "../OptionTitle";
@@ -15,6 +15,7 @@ import { useModal } from "@/hooks/useModal";
 import { Address } from "react-daum-postcode";
 import { useGetCode } from "@/hooks/apis/useCodeApi";
 import { regex } from "../../utils/regex";
+import { useRouter } from "next/navigation";
 
 export interface IFiles {
   company_profile: File[];
@@ -75,6 +76,7 @@ export default function Register() {
     service_name,
     company_profile_url,
   } = form;
+  const { append } = useToastStore();
 
   const { phone_number, date_number, buisness_number } = regex;
 
@@ -100,6 +102,8 @@ export default function Register() {
     company_profile_url: company_profile_url || undefined,
   });
 
+  const router = useRouter();
+
   const selectAddress = (data: Address) => {
     if (modalState === "MAIN_ADDRESS") {
       setForm({
@@ -118,6 +122,28 @@ export default function Register() {
   };
 
   const keywords = business_codes?.codes.map((item) => item.keyword) ?? [];
+
+  const preventClose = (e: BeforeUnloadEvent) => {
+    e.preventDefault();
+    e.returnValue = ""; //Chrome에서 동작하도록; deprecated
+  };
+
+  useEffect(() => {
+    (() => {
+      window.addEventListener("beforeunload", preventClose);
+    })();
+
+    return () => {
+      window.removeEventListener("beforeunload", preventClose);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!sessionStorage.getItem("company_info")) {
+      router.push("/login");
+      append({ message: "사업자 인증을 먼저 완료해주세요", type: "RED" });
+    }
+  }, []);
 
   return (
     <Container>
@@ -241,7 +267,6 @@ export default function Register() {
         onUploadImage={onUploadImage}
         messages={["파일은 최대 10MB를 초과 할 수 없고, 1개만 첨부할 수 있습니다.\n이미지 파일만 업로드 가능합니다."]}
         title="사업자 등록증"
-        required
       />
       <FileInput
         setForm={setForm}
@@ -251,7 +276,6 @@ export default function Register() {
         onUploadImage={onUploadImage}
         messages={["파일은 최대 10MB를 초과 할 수 없고, 1개만 첨부할 수 있습니다.\n이미지 파일만 업로드 가능합니다."]}
         title="회사 로고"
-        required
       />
       <FileInput
         setForm={setForm}
@@ -272,7 +296,7 @@ export default function Register() {
         src="https://jobis-webview.team-return.com/sign-up-policy"
         width="100%"
         height={300}
-        style={{ marginBottom: 20 }}
+        style={{ marginBottom: 20, border: `1px solid ${theme.color.gray40}`, borderRadius: 4 }}
       ></iframe>
       <div style={{ width: "100%", marginBottom: 20 }}>
         <CheckBox margin={["right", "auto"]}>개인정보 수집에 동의합니다</CheckBox>

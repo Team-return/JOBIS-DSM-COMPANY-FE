@@ -97,9 +97,7 @@ const GatherModal = ({ setForm }: IPropsType) => {
         </SmallWrapper>
       </BigWrapper>
       <BigWrapper>
-        <Title>
-          사용기술<span style={{ color: "#0087FF" }}> *</span>
-        </Title>
+        <Title>사용기술</Title>
         <ContentsText>필요한 기술 스택을 추가하세요.</ContentsText>
         <CardWrapper>
           {techList.map((res, idx) => {
@@ -143,6 +141,20 @@ const GatherModal = ({ setForm }: IPropsType) => {
             value={area.major_task}
             onInput={handleResizeHeight}
             onChange={(e) => setArea({ ...area, major_task: e.target.value })}
+          />
+        </SmallWrapper>
+      </BigWrapper>
+      <BigWrapper>
+        <Title>
+          우대사항<span style={{ color: "#0087FF" }}> *</span>
+        </Title>
+        <ContentsText>우대사항을 입력해주세요</ContentsText>
+        <SmallWrapper>
+          <Textarea
+            ref={textRef}
+            value={area.preferential_treatment}
+            onInput={handleResizeHeight}
+            onChange={(e) => setArea({ ...area, preferential_treatment: e.target.value })}
           />
         </SmallWrapper>
       </BigWrapper>
@@ -288,7 +300,7 @@ const NumInput = styled.input`
 const Textarea = styled.textarea`
   border: none;
   border-bottom: 1px solid #cccccc;
-  width: 450px;
+  width: 90%;
   height: 55px;
   padding: 10px;
   outline: none;

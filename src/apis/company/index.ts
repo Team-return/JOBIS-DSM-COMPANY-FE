@@ -4,6 +4,7 @@ import {
   ICheckBuisnessNumberResponse,
   IMyCompanyResponse,
   IUpdateCompanyInfoRequest,
+  ICompanyRegisterResponse,
 } from "./types";
 
 const router = "/companies";
@@ -16,7 +17,7 @@ export const checkBusinessNumber = async (business_number: string) => {
 };
 
 export const companyRegister = async (body: ICompanyRegisterRequest) => {
-  const { data } = await instance.post(`${router}`, body);
+  const { data } = await instance.post<ICompanyRegisterResponse>(`${router}`, body);
   return data;
 };
 

@@ -20,10 +20,10 @@ export default function Home() {
   const router = useRouter();
 
   const { setForm } = useInput<IEditRecruitmentRequest>({
-    preferential_treatment: "",
     required_grade: undefined,
     required_licenses: [],
-    work_hours: "",
+    start_time: "",
+    end_time: "",
     train_pay: "",
     pay: "",
     benefits: "",
@@ -38,10 +38,10 @@ export default function Home() {
   useEffect(() => {
     if (myRecruitment) {
       setForm({
-        preferential_treatment: myRecruitment.preferential_treatment,
         required_grade: myRecruitment.required_grade,
         required_licenses: myRecruitment.required_licenses,
-        work_hours: myRecruitment.work_hours,
+        start_time: myRecruitment.start_time,
+        end_time: myRecruitment.end_time,
         train_pay: myRecruitment.train_pay,
         pay: myRecruitment.pay,
         benefits: myRecruitment.benefits,
@@ -123,7 +123,7 @@ export default function Home() {
               <Title>근무시간 *</Title>
               <Stack>
                 <Text color="gray90" size="Body1">
-                  {myRecruitment?.work_hours}시간
+                  {myRecruitment?.start_time.slice(0, 5)} ~ {myRecruitment?.end_time.slice(0, 5)}
                 </Text>
               </Stack>
             </HStack>
@@ -136,7 +136,7 @@ export default function Home() {
           </VStack>
           <VStack gap={30}>
             <HStack>
-              <Title>병역 특례 *</Title>
+              <Title>병역특례 신청 계획 *</Title>
               <Text color="gray90" size="Body1">
                 {myRecruitment?.military ? "있음" : "없음"}
               </Text>
@@ -161,14 +161,7 @@ export default function Home() {
           <Title>채용 절차 *</Title>
           <VStack width={800}>
             <Text color="gray90" size="Body1">
-              {myRecruitment?.hiring_progress.map((progress, idx) => {
-                return (
-                  <>
-                    {idx + 1}. {hiringProgressType[progress]}
-                    <br />
-                  </>
-                );
-              })}
+              {myRecruitment?.hiring_progress.map((progress) => hiringProgressType[progress]).join(" → ")}
             </Text>
           </VStack>
         </HStack>
@@ -217,14 +210,6 @@ export default function Home() {
           </Text>
         </HStack>
         <HStack>
-          <Title>자격 우대사항</Title>
-          <VStack width={800}>
-            <Text color="gray90" size="Body1">
-              {myRecruitment?.preferential_treatment || "-"}
-            </Text>
-          </VStack>
-        </HStack>
-        <HStack>
           <Title>기타사항</Title>
           <VStack width={800}>
             <Text color="gray90" size="Body1" whitespace="pre-line">
@@ -262,7 +247,7 @@ const Title = styled.div`
   display: flex;
   /* align-items: center; */
   padding-top: 4px;
-  width: 120px;
+  min-width: 120px;
   height: 45px;
   font-size: 18px;
   font-weight: 700;

@@ -10,14 +10,13 @@ import Image from "next/image";
 import { useCreateRecruitmentRequest } from "@/hooks/apis/useRecruitmentsApi";
 import Modal from "@/components/Modal";
 import ProgressModal from "@/components/Modal/progressModal";
-import { IHiringProgress, IRecruitment } from "@/apis/recruitments/types";
+import { IRecruitment } from "@/apis/recruitments/types";
 import { useModal } from "@/hooks/useModal";
 import { useHiringProgressStore } from "@/store/progressState";
 import GatherModal from "@/components/Modal/recruitmentModal";
 import { useGetCode } from "@/hooks/apis/useCodeApi";
 import TechModal from "@/components/Modal/techModal";
 import { hiringProgressType } from "@/utils/translate";
-import { KeyByValue } from "@/utils/useKeyByValue";
 import LicenseModal from "@/components/Modal/licenseModal";
 import XBtn from "../../../public/X.svg";
 import { useRouter } from "next/navigation";
@@ -29,27 +28,27 @@ export default function Registration() {
 
   const { form, onChange, setForm } = useInput<IRecruitment>({
     areas: [],
-    preferential_treatment: "",
     required_licenses: [],
     required_grade: "",
-    work_hours: "",
+    start_time: "",
+    end_time: "",
     train_pay: "",
     pay: "",
     benefits: "",
     military: false,
     hiring_progress: ["DOCUMENT"],
-    submit_document: "",
+    submit_document: "자기소개서, 이력서, 포트폴리오",
     start_date: "",
     end_date: "",
     etc: "",
   });
 
   const {
-    preferential_treatment,
     areas,
     required_grade,
     required_licenses,
-    work_hours,
+    start_time,
+    end_time,
     train_pay,
     pay,
     benefits,
@@ -57,6 +56,7 @@ export default function Registration() {
     submit_document,
     start_date,
     end_date,
+    hiring_progress,
     etc,
   } = form;
 
@@ -85,8 +85,6 @@ export default function Registration() {
     };
   }, []);
 
-  console.log(preferential_treatment);
-
   return (
     <Container>
       <RecruimentWrapper>
@@ -107,7 +105,7 @@ export default function Registration() {
           {!!areas.length && (
             <Boxs>
               {areas.map((area, idx) => {
-                const { job_codes, tech_codes, hiring, major_task } = area;
+                const { job_codes, tech_codes, hiring, major_task, preferential_treatment } = area;
                 return (
                   <GatherFieldBox key={idx}>
                     <FieldBoxTitle>
@@ -122,6 +120,7 @@ export default function Registration() {
                       {tech_name?.codes.map((code) => tech_codes.includes(code?.code) && code?.keyword + " ") || "없음"}
                     </FieldText>
                     <FieldText style={{ top: 70 }}>주요 업무 : {major_task || "없음"}</FieldText>
+                    <FieldText style={{ top: 70 }}>우대사항 : {preferential_treatment || "없음"}</FieldText>
                     <PeopleCount>{hiring}명</PeopleCount>
                     <CancelIcon
                       width={10}
@@ -147,7 +146,6 @@ export default function Registration() {
         </div>
 
         <OptionTitle title="자격요건" />
-        <TextArea name="preferential_treatment" title="우대사항" value={preferential_treatment} onChange={onChange} />
         <CustomInput title="필수사항">
           <VStack margin={["top", 20]}>
             <Label>
@@ -191,36 +189,28 @@ export default function Registration() {
         </CustomInput>
 
         <OptionTitle title="근무조건" />
-        <Input
-          name="work_hours"
-          value={work_hours}
-          required
-          onChange={onChange}
-          title="근무시간"
-          placeholder="시간"
-          unit="시간"
-          autoComplete="off"
-        />
-        {/* <CustomInput title="근무시간">
+        <CustomInput title="근무시간">
           <DateContainer>
             <DateInput
+              $width={110}
               name="start_time"
               onChange={onChange}
               value={start_time}
-              type="date"
+              type="time"
               data-placeholder="출근 시간"
             />
             <Text>~</Text>
             <DateInput
+              $width={110}
               name="end_time"
               onChange={onChange}
               value={end_time}
-              type="date"
+              type="time"
               data-placeholder="퇴근 시간"
               aria-required="true"
             />
           </DateContainer>
-        </CustomInput> */}
+        </CustomInput>
         <Input
           name="train_pay"
           value={train_pay}
@@ -258,7 +248,7 @@ export default function Registration() {
         </CustomInput>
         {!!hiringProgress.length && (
           <CustomInput>
-            <VStack>{hiringProgress.map((res) => res.name).join(" -> ")}</VStack>
+            <VStack>{hiring_progress.map((progress) => hiringProgressType[progress]).join(" → ")}</VStack>
           </CustomInput>
         )}
         <Input
@@ -269,14 +259,6 @@ export default function Registration() {
           title="제출 서류"
           autoComplete="off"
         />
-        {/* <CustomInput title="제출 서류" required>
-          <HStack align="center" gap={30}>
-            <CheckBox>자기소개서</CheckBox>
-            <CheckBox>이력서</CheckBox>
-            <CheckBox>포트폴리오</CheckBox>
-            <CheckBox>직접입력</CheckBox>
-          </HStack>
-        </CustomInput> */}
         <CustomInput required title="모집 기간">
           <div style={{ display: "flex", flexDirection: "column", width: "100%", gap: 20, marginTop: 10 }}>
             <DateContainer>
@@ -327,25 +309,8 @@ export default function Registration() {
         )}
 
         {modalState === "HIRING_PROGRESS" && (
-          <Modal
-            width={450}
-            onClose={() => {
-              closeModal();
-              setForm((prev) => ({
-                ...prev,
-                hiring_progress: hiringProgress.map(
-                  (progress) => KeyByValue(hiringProgressType, progress.name) as IHiringProgress
-                ),
-              }));
-            }}
-            closeAble
-          >
-            <ProgressModal />
-          </Modal>
-        )}
-        {modalState === "USE_TECH" && (
-          <Modal width={700} onClose={() => openModal("GATHER_FIELD")} closeAble>
-            <TechModal />
+          <Modal width={780} onClose={closeModal} closeAble>
+            <ProgressModal hiringProgressArray={hiring_progress} setRecruitmentFormDetailInfo={setForm} />
           </Modal>
         )}
         {modalState === "LICENSE" && (
@@ -354,6 +319,11 @@ export default function Registration() {
           </Modal>
         )}
       </RecruimentWrapper>
+      {modalState === "USE_TECH" && (
+        <Modal width={700} onClose={() => openModal("GATHER_FIELD")} closeAble>
+          <TechModal />
+        </Modal>
+      )}
     </Container>
   );
 }
@@ -479,7 +449,8 @@ const DateContainer = styled.div`
   gap: 20px;
 `;
 
-const DateInput = styled.input`
+const DateInput = styled.input<{ $width?: number }>`
+  width: ${({ $width }) => $width + "px"};
   outline: 0;
   border: 0;
   color: #7f7f7f;

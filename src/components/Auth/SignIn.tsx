@@ -71,7 +71,11 @@ export default function SignIn() {
   }, []);
 
   return (
-    <Container>
+    <Container
+      onSubmit={(e) => {
+        e.preventDefault();
+      }}
+    >
       <Wrapper>
         <Title>사업자 인증</Title>
         {isNext ? (
@@ -103,14 +107,16 @@ export default function SignIn() {
           unoptimized
         />
         {hover && <InfoText>{hoverInfo()}</InfoText>}
-        <Button onClick={Auth}>{isNext ? (isExist ? "로그인하기" : "등록하기") : "사업자 번호 확인"}</Button>
+        <Button type="submit" onClick={Auth}>
+          {isNext ? (isExist ? "로그인하기" : "등록하기") : "사업자 번호 확인"}
+        </Button>
       </Wrapper>
       <Img src={CompanyImg} width={550} height={450} alt="company" />
     </Container>
   );
 }
 
-const Container = styled.div`
+const Container = styled.form`
   position: relative;
   width: 850px;
   height: 380px;

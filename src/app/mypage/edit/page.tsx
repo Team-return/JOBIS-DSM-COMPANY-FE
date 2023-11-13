@@ -11,15 +11,13 @@ import { useInput } from "@/hooks/useInput";
 import { IUpdateCompanyInfoRequest } from "@/apis/company/types";
 import DaumPostcode, { Address } from "react-daum-postcode";
 import Modal from "@/components/Modal";
-import { useModalStateStore } from "@/store/modalStore";
 import { useModal } from "@/hooks/useModal";
 import { companyType } from "@/utils/translate";
 
 export default function EditMyPage() {
   const { data: myCompany, isLoading } = useMyCompanyInfo();
   const router = useRouter();
-  const { modalState } = useModalStateStore();
-  const { closeModal, openModal } = useModal();
+  const { closeModal, openModal, modalState } = useModal();
 
   const { form, setForm, onChange } = useInput<IUpdateCompanyInfoRequest>({
     founded_at: "",
@@ -201,11 +199,11 @@ export default function EditMyPage() {
             </HStack>
             <HStack>
               <Title>전화번호1</Title>
-              <Input name="manager_phone_no" onChange={onChange} value={form.manager_phone_no} />
+              <Input name="manager_phone_no" onChange={onChange} value={form.manager_phone_no} maxLength={11} />
             </HStack>
             <HStack>
               <Title>전화번호2</Title>
-              <Input name="sub_manager_phone_no" onChange={onChange} value={form.sub_manager_phone_no} />
+              <Input name="sub_manager_phone_no" onChange={onChange} value={form.sub_manager_phone_no} maxLength={11} />
             </HStack>
             <HStack>
               <Title>팩스</Title>

@@ -4,6 +4,7 @@ export interface IArea {
   tech_codes: number[];
   hiring: number;
   major_task: string;
+  preferential_treatment: string;
 }
 
 export type IHiringProgress =
@@ -15,15 +16,14 @@ export type IHiringProgress =
   | "PERSONALITY"
   | "TECH_INTERVIEW"
   | "CULTURE_INTERVIEW"
-  | "FINAL_INTERVIEW"
-  | "";
+  | "FINAL_INTERVIEW";
 
 export interface IRecruitment {
   areas: IArea[];
-  preferential_treatment: string;
   required_licenses: string[];
   required_grade?: string;
-  work_hours: string;
+  start_time: string;
+  end_time: string;
   train_pay: string;
   pay: string;
   benefits: string;
@@ -35,7 +35,7 @@ export interface IRecruitment {
   etc: string;
 }
 
-export interface IEditRecruitmentRequest extends Omit<IRecruitment, "areas" | "military_support"> {
+export interface IEditRecruitmentRequest extends Omit<IRecruitment, "areas"> {
   military: boolean;
 }
 
@@ -48,6 +48,7 @@ export interface IMyRecruitmentResponse extends Omit<IRecruitment, "areas"> {
     tech: string[];
     major_task: string;
     hiring: number;
+    preferential_treatment: string;
   }[];
   company_name: string;
   company_profile_url: string;

@@ -102,9 +102,9 @@ export default function Registration() {
 
         <OptionTitle title="모집 분야" />
         <div style={{ display: "flex", flexDirection: "column", width: "100%" }}>
-          {!!areas?.length && (
+          {!!areas.length && (
             <Boxs>
-              {areas?.map((area, idx) => {
+              {areas.map((area, idx) => {
                 const { job_codes, tech_codes, hiring, major_task, preferential_treatment } = area;
                 return (
                   <GatherFieldBox key={idx}>
@@ -125,7 +125,7 @@ export default function Registration() {
                     <CancelIcon
                       width={10}
                       height={10}
-                      onClick={() => setForm({ ...form, areas: areas?.filter((_, idx2) => idx2 !== idx) })}
+                      onClick={() => setForm({ ...form, areas: areas.filter((_, idx2) => idx2 !== idx) })}
                       src={XBtn}
                       alt=""
                     />

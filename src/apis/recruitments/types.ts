@@ -19,7 +19,7 @@ export type IHiringProgress =
   | "FINAL_INTERVIEW";
 
 export interface IRecruitment {
-  areas?: IArea[];
+  areas: IArea[];
   required_licenses: string[];
   required_grade?: string;
   start_time: string;

@@ -11,12 +11,15 @@ import { hiringProgressType } from "@/utils/translate";
 import selectIcon from "../../../public/selectIcon.svg";
 import { useModal } from "@/hooks/useModal";
 
-interface PropsType {
+interface PropsType<T> {
   hiringProgressArray: IHiringProgress[];
-  setRecruitmentFormDetailInfo: Dispatch<SetStateAction<IRecruitment | IEditRecruitmentRequest>>;
+  setRecruitmentFormDetailInfo: Dispatch<SetStateAction<T>>;
 }
 
-const ProgressModal = ({ hiringProgressArray, setRecruitmentFormDetailInfo }: PropsType) => {
+const ProgressModal = <T extends IRecruitment | IEditRecruitmentRequest>({
+  hiringProgressArray,
+  setRecruitmentFormDetailInfo,
+}: PropsType<T>) => {
   const [state, setState] = useState<IHiringProgress[]>([]);
 
   const { closeModal } = useModal();

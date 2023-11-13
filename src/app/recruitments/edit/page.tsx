@@ -145,8 +145,8 @@ export default function EditRecruiment() {
           </VStack>
           <VStack gap={30}>
             <HStack>
-              <Title>병역 특례 *</Title>
-              <HStack gap={50}>
+              <Title>병역특례 신청 계획 *</Title>
+              <HStack gap={50} margin={["left", 30]}>
                 <RadioButton
                   name="military"
                   checked={form.military}
@@ -173,7 +173,7 @@ export default function EditRecruiment() {
           </VStack>
         </Grid>
         <HStack>
-          <Title>사내 복지</Title>
+          <Title>복리 후생</Title>
           <VStack width={800}>
             <TextArea name="benefits" value={form.benefits} onChange={onChange} />
           </VStack>

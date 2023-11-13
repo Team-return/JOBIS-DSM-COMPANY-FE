@@ -136,7 +136,7 @@ export default function Home() {
           </VStack>
           <VStack gap={30}>
             <HStack>
-              <Title>병역 특례 *</Title>
+              <Title>병역특례 신청 계획 *</Title>
               <Text color="gray90" size="Body1">
                 {myRecruitment?.military ? "있음" : "없음"}
               </Text>
@@ -247,7 +247,7 @@ const Title = styled.div`
   display: flex;
   /* align-items: center; */
   padding-top: 4px;
-  width: 120px;
+  min-width: 120px;
   height: 45px;
   font-size: 18px;
   font-weight: 700;

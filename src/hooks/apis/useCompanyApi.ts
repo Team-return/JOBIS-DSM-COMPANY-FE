@@ -8,6 +8,7 @@ import cookie from "react-cookies";
 export const useCompanyRegister = (body: ICompanyRegisterRequest) => {
   const router = useRouter();
   const { append } = useToastStore();
+  const queryClient = useQueryClient();
 
   return useMutation(() => companyRegister(body), {
     onSuccess: (res) => {
@@ -22,6 +23,8 @@ export const useCompanyRegister = (body: ICompanyRegisterRequest) => {
         message: "가입에 성공하였습니다",
       });
       router.push("/");
+      queryClient.invalidateQueries(["myRecruit"]);
+      queryClient.invalidateQueries(["myCompany"]);
     },
     onError: () => {
       append({

@@ -199,11 +199,11 @@ export default function EditMyPage() {
             </HStack>
             <HStack>
               <Title>전화번호1</Title>
-              <Input name="manager_phone_no" onChange={onChange} value={form.manager_phone_no} />
+              <Input name="manager_phone_no" onChange={onChange} value={form.manager_phone_no} maxLength={11} />
             </HStack>
             <HStack>
               <Title>전화번호2</Title>
-              <Input name="sub_manager_phone_no" onChange={onChange} value={form.sub_manager_phone_no} />
+              <Input name="sub_manager_phone_no" onChange={onChange} value={form.sub_manager_phone_no} maxLength={11} />
             </HStack>
             <HStack>
               <Title>팩스</Title>

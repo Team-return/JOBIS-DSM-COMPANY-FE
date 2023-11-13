@@ -146,6 +146,20 @@ const GatherModal = ({ setForm }: IPropsType) => {
           />
         </SmallWrapper>
       </BigWrapper>
+      <BigWrapper>
+        <Title>
+          우대사항<span style={{ color: "#0087FF" }}> *</span>
+        </Title>
+        <ContentsText>우대사항을 입력해주세요</ContentsText>
+        <SmallWrapper>
+          <Textarea
+            ref={textRef}
+            value={area.preferential_treatment}
+            onInput={handleResizeHeight}
+            onChange={(e) => setArea({ ...area, preferential_treatment: e.target.value })}
+          />
+        </SmallWrapper>
+      </BigWrapper>
       <BtnWrapper>
         <CancelBtn
           onClick={() => {
@@ -288,7 +302,7 @@ const NumInput = styled.input`
 const Textarea = styled.textarea`
   border: none;
   border-bottom: 1px solid #cccccc;
-  width: 450px;
+  width: 90%;
   height: 55px;
   padding: 10px;
   outline: none;

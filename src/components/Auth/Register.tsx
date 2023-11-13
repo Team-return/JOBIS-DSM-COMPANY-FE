@@ -2,7 +2,7 @@
 
 import React, { useEffect } from "react";
 import { styled } from "styled-components";
-import { CheckBox, DropDown, Stack, theme } from "@team-return/design-system";
+import { CheckBox, DropDown, Stack, theme, useToastStore } from "@team-return/design-system";
 import DaumPostcode from "react-daum-postcode";
 import { CustomInput, FileInput, Input, TextArea } from "../Input";
 import OptionTitle from "../OptionTitle";
@@ -15,6 +15,7 @@ import { useModal } from "@/hooks/useModal";
 import { Address } from "react-daum-postcode";
 import { useGetCode } from "@/hooks/apis/useCodeApi";
 import { regex } from "../../utils/regex";
+import { useRouter } from "next/navigation";
 
 export interface IFiles {
   company_profile: File[];
@@ -75,6 +76,7 @@ export default function Register() {
     service_name,
     company_profile_url,
   } = form;
+  const { append } = useToastStore();
 
   const { phone_number, date_number, buisness_number } = regex;
 
@@ -99,6 +101,8 @@ export default function Register() {
     sub_manager_phone_no: sub_manager_phone_no?.replace(/-/g, "") || undefined,
     company_profile_url: company_profile_url || undefined,
   });
+
+  const router = useRouter();
 
   const selectAddress = (data: Address) => {
     if (modalState === "MAIN_ADDRESS") {
@@ -132,6 +136,13 @@ export default function Register() {
     return () => {
       window.removeEventListener("beforeunload", preventClose);
     };
+  }, []);
+
+  useEffect(() => {
+    if (!sessionStorage.getItem("company_info")) {
+      router.push("/login");
+      append({ message: "사업자 인증을 먼저 완료해주세요", type: "RED" });
+    }
   }, []);
 
   return (

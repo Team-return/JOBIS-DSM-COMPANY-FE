@@ -11,15 +11,13 @@ import { useInput } from "@/hooks/useInput";
 import { IUpdateCompanyInfoRequest } from "@/apis/company/types";
 import DaumPostcode, { Address } from "react-daum-postcode";
 import Modal from "@/components/Modal";
-import { useModalStateStore } from "@/store/modalStore";
 import { useModal } from "@/hooks/useModal";
 import { companyType } from "@/utils/translate";
 
 export default function EditMyPage() {
   const { data: myCompany, isLoading } = useMyCompanyInfo();
   const router = useRouter();
-  const { modalState } = useModalStateStore();
-  const { closeModal, openModal } = useModal();
+  const { closeModal, openModal, modalState } = useModal();
 
   const { form, setForm, onChange } = useInput<IUpdateCompanyInfoRequest>({
     founded_at: "",

@@ -36,9 +36,19 @@ const EditRecruitAreaModal = ({ setForm }: IPropsType) => {
         hiring: area.hiring,
         major_task: area.major_task,
         job_codes: area.job_codes,
+        preferential_treatment: area.preferential_treatment,
       });
     }
-  }, [myRecruitment, area.id, area.hiring, area.job_codes, area.major_task, area.tech_codes, setArea]);
+  }, [
+    myRecruitment,
+    area.id,
+    area.hiring,
+    area.job_codes,
+    area.major_task,
+    area.tech_codes,
+    area.preferential_treatment,
+    setArea,
+  ]);
 
   const PushArray = (tech: ICode) => {
     setArea({ ...area, job_codes: [...area.job_codes, tech.code] });
@@ -106,9 +116,12 @@ const EditRecruitAreaModal = ({ setForm }: IPropsType) => {
           </VStack>
         </Stack>
         <BigWrapper>
-          <Text size="Heading5" color="liteBlue" align="start" margin={["bottom", 20]}>
-            사용기술
-          </Text>
+          <HStack justify="space-between" align="start">
+            <Text size="Heading5" color="liteBlue" align="start" margin={["bottom", 20]}>
+              사용기술
+            </Text>
+            <AddRecruitmentButton onClick={() => {}}>기술 추가하기 +</AddRecruitmentButton>
+          </HStack>
           <TechItemWrapper>
             {area.tech_codes.map((tech, idx) => {
               return (
@@ -295,7 +308,6 @@ const TextArea = styled.textarea`
   outline: 0;
   border: 1px solid #cccccc;
   border-radius: 2px;
-  resize: none;
   font-size: 18px;
   font-weight: 400;
   padding: 10px 15px;
@@ -329,4 +341,17 @@ const IconWrapper = styled.div`
   height: 20px;
   background-color: ${theme.color.gray70};
   border-radius: 50px;
+`;
+
+const AddRecruitmentButton = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid ${theme.color.gray50};
+  margin-top: 10px;
+  color: ${theme.color.gray60};
+  padding: 8px 20px;
+  border-radius: 8px;
+  ${theme.font.Body3};
+  cursor: pointer;
 `;

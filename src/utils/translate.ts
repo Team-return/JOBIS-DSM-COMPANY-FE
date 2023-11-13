@@ -10,7 +10,6 @@ export const hiringProgressType: Record<IHiringProgress, string> = {
   TECH_INTERVIEW: "기술면접",
   CULTURE_INTERVIEW: "컬쳐면접",
   FINAL_INTERVIEW: "최종면접",
-  "": "",
 };
 
 export const companyType = {

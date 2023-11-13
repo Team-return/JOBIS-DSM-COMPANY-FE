@@ -97,9 +97,7 @@ const GatherModal = ({ setForm }: IPropsType) => {
         </SmallWrapper>
       </BigWrapper>
       <BigWrapper>
-        <Title>
-          사용기술<span style={{ color: "#0087FF" }}> *</span>
-        </Title>
+        <Title>사용기술</Title>
         <ContentsText>필요한 기술 스택을 추가하세요.</ContentsText>
         <CardWrapper>
           {techList.map((res, idx) => {

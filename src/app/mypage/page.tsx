@@ -202,7 +202,7 @@ export default function MyPage() {
               <Title>팩스</Title>
               <Stack align="center" height={45}>
                 <Text color="gray90" size="Body1">
-                  {myCompany?.fax || "-"}
+                  {phone_number(myCompany?.fax || "") || "-"}
                 </Text>
               </Stack>
             </HStack>

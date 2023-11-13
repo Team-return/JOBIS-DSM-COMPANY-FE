@@ -1,6 +1,6 @@
 import { IRecruitment } from "@/apis/recruitments/types";
 import { useModal } from "@/hooks/useModal";
-import React, { ChangeEvent, Dispatch, SetStateAction, useState } from "react";
+import React, { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Icon, theme } from "@team-return/design-system";
 import styled from "styled-components";
 import { useGetRequiredLicensesList } from "@/apis/openai";
@@ -13,6 +13,7 @@ interface PropsType {
 const LicenseModal = ({ setForm, requiredLicensesArray }: PropsType) => {
   const { closeModal } = useModal();
   const [search, setSearch] = useState("");
+  const [licenses, setLicenses] = useState<string[]>([]);
   const { data: requiredLicenses } = useGetRequiredLicensesList(1, 1972);
   const requiredLicensesNames = requiredLicenses?.data.map((requiredLicense) => requiredLicense.종목명);
   const requiredLicensesFilteringData = requiredLicensesNames?.filter(
@@ -20,20 +21,18 @@ const LicenseModal = ({ setForm, requiredLicensesArray }: PropsType) => {
   );
 
   const CheckArray = (requiredLicenseName: string) => {
-    !requiredLicensesArray.includes(requiredLicenseName)
-      ? setForm((recruitmentFormDetailInfo) => ({
-          ...recruitmentFormDetailInfo,
-          required_licenses: [...requiredLicensesArray, requiredLicenseName],
-        }))
-      : setForm((recruitmentFormDetailInfo) => ({
-          ...recruitmentFormDetailInfo,
-          required_licenses: requiredLicensesArray.filter((requiredLicense) => requiredLicense !== requiredLicenseName),
-        }));
+    !licenses.includes(requiredLicenseName)
+      ? setLicenses((prev) => [...prev, requiredLicenseName])
+      : setLicenses((prev) => prev.filter((requiredLicense) => requiredLicense !== requiredLicenseName));
   };
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
   };
+
+  useEffect(() => {
+    setLicenses(requiredLicensesArray);
+  }, []);
 
   return (
     <Container>
@@ -48,7 +47,7 @@ const LicenseModal = ({ setForm, requiredLicensesArray }: PropsType) => {
         </InputWrapper>
       </TitleWrapper>
       <SmallCardWrapper>
-        {requiredLicensesArray.map((license, idx) => {
+        {licenses.map((license, idx) => {
           return (
             <SmallCard key={idx}>
               {license}
@@ -65,7 +64,7 @@ const LicenseModal = ({ setForm, requiredLicensesArray }: PropsType) => {
               return (
                 <BigCard
                   key={idx}
-                  colorBool={requiredLicensesArray.includes(license)}
+                  colorBool={licenses.includes(license)}
                   onClick={() => {
                     CheckArray(license);
                   }}
@@ -76,7 +75,14 @@ const LicenseModal = ({ setForm, requiredLicensesArray }: PropsType) => {
             })}
         </BigCardWrapper>
       </MaxSize>
-      <Btn onClick={closeModal}>완료</Btn>
+      <Btn
+        onClick={() => {
+          setForm((prev) => ({ ...prev, required_licenses: licenses }));
+          closeModal();
+        }}
+      >
+        완료
+      </Btn>
     </Container>
   );
 };

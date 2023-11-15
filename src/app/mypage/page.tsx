@@ -45,7 +45,7 @@ export default function MyPage() {
             </CompanyType>
           </HStack>
           <Text color="gray60" size="Body2">
-            {myCompany?.main_address}
+            {buisness_number(myCompany?.biz_no || "")}
           </Text>
         </VStack>
         <MenuWrapper>

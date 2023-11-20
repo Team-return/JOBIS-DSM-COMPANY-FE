@@ -15,6 +15,7 @@ import { useLogin } from "@/hooks/apis/useLoginApi";
 import { regex } from "../../utils/regex";
 import cookie from "react-cookies";
 import { useToastStore } from "@team-return/design-system";
+import { Spinner } from "../Spinner";
 
 export default function SignIn() {
   const router = useRouter();
@@ -45,7 +46,7 @@ export default function SignIn() {
     },
   });
 
-  const { mutate: login } = useLogin({ account_id: id.replace(/-/g, ""), password: pw });
+  const { mutate: login, isLoading } = useLogin({ account_id: id.replace(/-/g, ""), password: pw });
 
   const Auth = () => {
     if (isNext) {
@@ -53,6 +54,7 @@ export default function SignIn() {
         login();
       } else {
         router.push("/registration");
+        sessionStorage.setItem("p", pw);
       }
     } else {
       CheckCompany.mutate();
@@ -107,8 +109,18 @@ export default function SignIn() {
           unoptimized
         />
         {hover && <InfoText>{hoverInfo()}</InfoText>}
-        <Button type="submit" onClick={Auth}>
-          {isNext ? (isExist ? "로그인하기" : "등록하기") : "사업자 번호 확인"}
+        <Button type="submit" onClick={Auth} disabled={isLoading || CheckCompany.isLoading}>
+          {isLoading || CheckCompany.isLoading ? (
+            <Spinner size={16} />
+          ) : isNext ? (
+            isExist ? (
+              "로그인하기"
+            ) : (
+              "등록하기"
+            )
+          ) : (
+            "사업자 번호 확인"
+          )}
         </Button>
       </Wrapper>
       <Img src={CompanyImg} width={550} height={450} alt="company" />
@@ -173,6 +185,11 @@ const Button = styled.button`
   margin-top: 80px;
   border: 0;
   cursor: pointer;
+  &:disabled {
+    background-color: ${theme.color.gray50};
+    color: ${theme.color.gray10};
+    cursor: not-allowed;
+  }
 `;
 
 const InfoImg = styled(Image)`

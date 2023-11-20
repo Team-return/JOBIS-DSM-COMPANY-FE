@@ -28,7 +28,9 @@ export const useCreateRecruitmentRequest = (body: IRecruitment) => {
 
 /** 내 모집의뢰서 조회 */
 export const useMyRecruitment = () => {
-  return useQuery(["myRecruit"], () => myRecruitment());
+  return useQuery(["myRecruit"], () => myRecruitment(), {
+    retry: 0,
+  });
 };
 
 export const useUpdateRecruitment = (body: IEditRecruitmentRequest) => {

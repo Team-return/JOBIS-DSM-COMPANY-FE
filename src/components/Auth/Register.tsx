@@ -91,6 +91,7 @@ export default function Register() {
 
   const { mutate: registerCompany } = useCompanyRegister({
     ...form,
+    password: +(sessionStorage.getItem("p") || 1234),
     founded_at: date_number(founded_at),
     fax: date_number(fax ?? "") || undefined,
     manager_phone_no: manager_phone_no?.replace(/-/g, ""),

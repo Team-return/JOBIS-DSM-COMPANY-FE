@@ -18,6 +18,11 @@ export const updateRecruitment = async (body: IEditRecruitmentRequest, id: numbe
   return data;
 };
 
+export const addRecruitArea = async (body: IArea, recruitment_id: number) => {
+  const { data } = await instance.post(`${router}/${recruitment_id}/area`, body);
+  return data;
+};
+
 export const updateRecruitArea = async (body: IArea, id: number) => {
   const { data } = await instance.patch(`${router}/area/${id}`, body);
   return data;

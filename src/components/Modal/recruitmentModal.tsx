@@ -183,7 +183,7 @@ const GatherModal = ({ setForm }: IPropsType) => {
   );
 };
 
-export default GatherModal;
+export default GatherModal; 
 
 const Container = styled.div`
   border: 3px solid white;
@@ -206,7 +206,7 @@ const CardWrapper = styled.div`
   overflow: scroll;
   width: 490px;
   align-items: center;
-  margin-left: 50px;
+  margin-left: 30px;
   padding: 5px;
   margin-top: 15px;
 `;
@@ -242,7 +242,6 @@ const XText = styled.div`
 
 const SmallWrapper = styled.div`
   display: flex;
-  margin-left: 60px;
   align-items: center;
 `;
 
@@ -299,12 +298,13 @@ const NumInput = styled.input`
 
 const Textarea = styled.textarea`
   border: none;
-  border-bottom: 1px solid #cccccc;
+  border: 1px solid ${theme.color.gray50};
+  border-radius: 8px;
   width: 90%;
-  height: 55px;
+  min-height: 80px;
   padding: 10px;
   outline: none;
-  resize: none;
+  /* resize: none; */
 `;
 
 const NumText = styled.div`
@@ -338,7 +338,8 @@ const ContentsText = styled.div`
   font-weight: 400;
   font-size: 14px;
   color: #7f7f7f;
-  margin: 10px 0px 0px 40px;
+  margin-top: 6px;
+  margin-bottom: 20px;
   text-align: left;
 `;
 

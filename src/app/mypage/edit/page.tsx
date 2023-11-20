@@ -169,11 +169,11 @@ export default function EditMyPage() {
           <VStack gap={30}>
             <HStack>
               <Title>대표</Title>
-              <Input name="representative_name" value={form.representative_name} />
+              <Input name="representative_name" value={form.representative_name} disabled />
             </HStack>
             <HStack>
               <Title>설립일</Title>
-              <Input name="founded_at" type="date" value={form.founded_at} />
+              <Input name="founded_at" type="date" value={form.founded_at} disabled />
             </HStack>
             <HStack>
               <Title>담당자1</Title>
@@ -191,7 +191,7 @@ export default function EditMyPage() {
           <VStack gap={30}>
             <HStack>
               <Title>사업자번호</Title>
-              <Input value={myCompany?.biz_no} />
+              <Input disabled value={myCompany?.biz_no} />
             </HStack>
             <HStack>
               <Title>근로자 수</Title>
@@ -317,6 +317,10 @@ const Input = styled.input<{ disabled?: boolean }>`
   font-weight: 400;
   &::placeholder {
     color: #7f7f7f;
+  }
+  &:disabled {
+    background-color: ${theme.color.gray30};
+    color: ${theme.color.gray60};
   }
   cursor: ${({ disabled }) => (disabled ? "not-allowed" : "auto")};
 `;

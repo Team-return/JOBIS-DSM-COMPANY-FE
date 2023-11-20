@@ -19,6 +19,7 @@ import { useRouter } from "next/navigation";
 import TechModal from "@/components/Modal/techModal";
 import ProgressModal from "@/components/Modal/progressModal";
 import LicenseModal from "@/components/Modal/licenseModal";
+import AddRecruitAreaModal from "@/components/Modal/addRecruitAreaModal";
 
 export default function EditRecruiment() {
   const { data: myRecruitment, error, isLoading } = useMyRecruitment();
@@ -64,7 +65,7 @@ export default function EditRecruiment() {
     }
   }, [myRecruitment, setForm]);
 
-  const { setArea } = useAreaState();
+  const { area, setArea, resetArea } = useAreaState();
   const router = useRouter();
 
   if (isLoading) {
@@ -234,7 +235,7 @@ export default function EditRecruiment() {
             })}
             <PlusIconBackground
               onClick={() => {
-                openModal("EDIT_RECRUIT_AREA");
+                openModal("ADD_RECRUIT_AREA");
               }}
             >
               <Icon icon="Plus" color="liteBlue" size={24} />
@@ -263,8 +264,27 @@ export default function EditRecruiment() {
           </VStack>
         </HStack>
       </VStack>
-      {modalState === "EDIT_RECRUIT_AREA" && (
-        <Modal width={700} onClose={closeModal} closeAble>
+      {modalState === "ADD_RECRUIT_AREA" && (
+        <Modal
+          width={700}
+          onClose={() => {
+            resetArea();
+            closeModal();
+          }}
+          closeAble
+        >
+          <AddRecruitAreaModal recruitment_id={myRecruitment!.recruitment_id!} setForm={setForm} />
+        </Modal>
+      )}
+      {!!area.id && modalState === "EDIT_RECRUIT_AREA" && (
+        <Modal
+          width={700}
+          onClose={() => {
+            resetArea();
+            closeModal();
+          }}
+          closeAble
+        >
           <EditRecruitAreaModal setForm={setForm} />
         </Modal>
       )}

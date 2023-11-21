@@ -43,7 +43,7 @@ export default function Register() {
     manager_phone_no: "",
     sub_manager_phone_no: undefined,
     fax: undefined,
-    password: typeof window !== "undefined" ? sessionStorage.getItem("p") || "" : "",
+    password: typeof window !== "undefined" ? (sessionStorage.getItem("p") as string) : "",
     business_number:
       typeof window !== "undefined" ? (sessionStorage.getItem("company_number")?.replace(/-/g, "") as string) : "",
     company_profile_url: "",
@@ -55,8 +55,8 @@ export default function Register() {
 
   const {
     name,
-    founded_at,
     password,
+    founded_at,
     representative_name,
     main_address,
     main_address_detail,

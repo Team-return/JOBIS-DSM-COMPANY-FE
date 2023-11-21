@@ -154,13 +154,8 @@ export default function Registration() {
         </div>
 
         <OptionTitle title="자격요건" />
-        <CustomInput title="필수사항">
-          <VStack margin={["top", 20]}>
-            <Label>
-              <CheckBox checked={required_licenses.length >= 1} disabled={!(required_licenses.length >= 1)}>
-                국가자격증
-              </CheckBox>
-            </Label>
+        <CustomInput title="국가 자격증">
+          <VStack margin={["top", 3]}>
             <Licenses>
               {required_licenses.map((license, idx) => (
                 <LicenseButton key={idx}>
@@ -176,24 +171,22 @@ export default function Registration() {
               ))}
               <AddLicenseButton onClick={() => openModal("LICENSE")}>+ 추가</AddLicenseButton>
             </Licenses>
-            <Label>
-              <CheckBox checked={!!required_grade} disabled={!required_grade}>
-                성적
-              </CheckBox>
-            </Label>
-            <Wrapper>
-              <GradeInput
-                name="required_grade"
-                value={form.required_grade}
-                onChange={onChange}
-                min={0}
-                max={100}
-                maxLength={3}
-                autoComplete="off"
-              />
-              <Percent>% 이내</Percent>
-            </Wrapper>
           </VStack>
+        </CustomInput>
+        <CustomInput title="성적">
+          <Wrapper>
+            <GradeInput
+              type="number"
+              name="required_grade"
+              value={required_grade}
+              onChange={onChange}
+              min={0}
+              max={100}
+              maxLength={3}
+              autoComplete="off"
+            />
+            <Percent>% 이내</Percent>
+          </Wrapper>
         </CustomInput>
 
         <OptionTitle title="근무조건" />
@@ -226,7 +219,7 @@ export default function Registration() {
           onChange={onChange}
           title="실습수당"
           placeholder="원/월"
-          unit="만원/월"
+          unit="원/월"
           autoComplete="off"
         />
         <Input
@@ -359,7 +352,7 @@ export default function Registration() {
         )}
         {modalState === "LICENSE" && (
           <Modal width={700} onClose={closeModal}>
-            <LicenseModal requiredLicensesArray={form.required_licenses} setForm={setForm} />
+            <LicenseModal requiredLicensesArray={required_licenses} setForm={setForm} />
           </Modal>
         )}
       </RecruimentWrapper>
@@ -477,14 +470,6 @@ const ConfirmRequestButton = styled.div`
   cursor: pointer;
 `;
 
-const Label = styled.label`
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 14px;
-  cursor: pointer;
-`;
-
 const DateContainer = styled.div`
   width: 100%;
   display: flex;
@@ -516,10 +501,12 @@ const GradeInput = styled.input`
   margin: 5px 0px;
   display: flex;
   align-items: center;
-  width: 40px;
+  width: 60px;
+  font-size: 20px;
   height: 15px;
   border: 0;
   outline: 0;
+  padding: 10px;
   text-align: center;
   border-bottom: 1px solid #cccccc;
   font-size: 12px;

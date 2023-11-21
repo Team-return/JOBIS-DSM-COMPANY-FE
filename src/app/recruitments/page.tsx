@@ -3,7 +3,7 @@
 import styled from "styled-components";
 import React, { useEffect, useState } from "react";
 import OptionTitle from "@/components/OptionTitle";
-import { CheckBox, HStack, Icon, Stack, VStack, theme } from "@team-return/design-system";
+import { CheckBox, HStack, Icon, RadioButton, Stack, VStack, theme } from "@team-return/design-system";
 import { CustomInput, Input, TextArea } from "@/components/Input";
 import { useInput } from "@/hooks/useInput";
 import Image from "next/image";
@@ -42,6 +42,7 @@ export default function Registration() {
     start_date: "",
     end_date: "",
     etc: "",
+    winter_intern: true,
   });
 
   const {
@@ -63,7 +64,7 @@ export default function Registration() {
 
   const createRecruitmentRequest = useCreateRecruitmentRequest({
     ...form,
-    benefits: form.benefits + " " + meal.join(", "),
+    benefits: meal.length !== 0 ? meal.join(", ") : "" + form.benefits && "\n" + form.benefits,
   });
 
   const { modalState, closeModal, openModal } = useModal();
@@ -71,6 +72,7 @@ export default function Registration() {
 
   const { data: tech_name } = useGetCode("TECH");
   const { data: job_name } = useGetCode("JOB");
+  const [before, setBefore] = useState(false);
 
   const router = useRouter();
 
@@ -80,14 +82,16 @@ export default function Registration() {
   };
 
   useEffect(() => {
-    (() => {
-      window.addEventListener("beforeunload", preventClose);
-    })();
+    if (!before) {
+      (() => {
+        window.addEventListener("beforeunload", preventClose);
+      })();
 
-    return () => {
-      window.removeEventListener("beforeunload", preventClose);
-    };
-  }, []);
+      return () => {
+        window.removeEventListener("beforeunload", preventClose);
+      };
+    }
+  }, [before]);
 
   return (
     <Container>
@@ -221,7 +225,7 @@ export default function Registration() {
           required
           onChange={onChange}
           title="실습수당"
-          placeholder="만원/월"
+          placeholder="원/월"
           unit="만원/월"
           autoComplete="off"
         />
@@ -267,15 +271,16 @@ export default function Registration() {
             석식제공
           </CheckBox>
         </HStack>
-        <CustomInput>
-          <CheckBox
-            name="military"
-            checked={military}
-            type="checkbox"
-            onChange={() => setForm({ ...form, military: !military })}
-          >
-            병역특례 신청
-          </CheckBox>
+        <OptionTitle title="병역특례" />
+        <CustomInput title="병역특례 신청 계획" required>
+          <HStack justify="center" margin={["left", 20]} gap={20}>
+            <RadioButton name="military" checked={military} onClick={() => setForm({ ...form, military: true })}>
+              있음
+            </RadioButton>
+            <RadioButton name="military" checked={!military} onClick={() => setForm({ ...form, military: false })}>
+              없음
+            </RadioButton>
+          </HStack>
         </CustomInput>
 
         <OptionTitle title="채용 절차" />
@@ -325,7 +330,8 @@ export default function Registration() {
         <Stack gap={30} margin={["top", 100]}>
           <CancelButton onClick={() => router.push("/")}>취소</CancelButton>
           <ConfirmRequestButton
-            onClick={() => {
+            onClick={async () => {
+              await setBefore(true);
               createRecruitmentRequest.mutate();
             }}
           >

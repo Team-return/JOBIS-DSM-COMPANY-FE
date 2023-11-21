@@ -280,11 +280,13 @@ export default function Registration() {
 
         <OptionTitle title="채용 절차" />
         <CustomInput title="채용 절차" required>
-          <AddRecruitmentButton onClick={() => openModal("HIRING_PROGRESS")}>절차 추가하기 +</AddRecruitmentButton>
+          <VStack justify="center">
+            {hiring_progress.map((progress) => hiringProgressType[progress]).join(" → ")}
+          </VStack>
         </CustomInput>
         {!!hiringProgress.length && (
           <CustomInput>
-            <VStack>{hiring_progress.map((progress) => hiringProgressType[progress]).join(" → ")}</VStack>
+            <AddRecruitmentButton onClick={() => openModal("HIRING_PROGRESS")}>절차 추가하기 +</AddRecruitmentButton>
           </CustomInput>
         )}
         <Input
@@ -497,7 +499,6 @@ const AddRecruitmentButton = styled.button`
   justify-content: center;
   align-items: center;
   border: 1px solid ${theme.color.gray50};
-  margin-top: 10px;
   color: ${theme.color.gray60};
   padding: 8px 20px;
   border-radius: 8px;

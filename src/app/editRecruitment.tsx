@@ -1,10 +1,8 @@
-"use client";
-
 import { useMyRecruitment, useUpdateRecruitment } from "@/hooks/apis/useRecruitmentsApi";
 import { HStack, Icon, RadioButton, Stack, Text, VStack, theme } from "@team-return/design-system";
 import Image from "next/image";
 import { styled } from "styled-components";
-import { useEffect } from "react";
+import { SetStateAction } from "react";
 import { useInput } from "@/hooks/useInput";
 import { IEditRecruitmentRequest } from "@/apis/recruitments/types";
 import { hiringProgressType } from "@/utils/translate";
@@ -15,58 +13,36 @@ import Modal from "@/components/Modal";
 import { Spinner } from "@/components/Spinner";
 import { NoResult } from "@/components/Recruitments/NoResult";
 import EditRecruitAreaModal from "@/components/Modal/editRecruitArea";
-import { useRouter } from "next/navigation";
 import TechModal from "@/components/Modal/techModal";
 import ProgressModal from "@/components/Modal/progressModal";
 import LicenseModal from "@/components/Modal/licenseModal";
 import AddRecruitAreaModal from "@/components/Modal/addRecruitAreaModal";
 
-export default function EditRecruiment() {
+export default function EditRecruiment({ setCanEdit }: { setCanEdit: React.Dispatch<SetStateAction<boolean>> }) {
   const { data: myRecruitment, error, isLoading } = useMyRecruitment();
   const { closeModal, openModal, modalState } = useModal();
   const { data: jobs } = useGetCode("JOB");
   const { data: techs } = useGetCode("TECH");
 
   const { form, setForm, onChange } = useInput<IEditRecruitmentRequest>({
-    required_grade: undefined,
-    required_licenses: [],
-    start_time: "",
-    end_time: "",
-    train_pay: "",
-    pay: "",
-    benefits: "",
-    military: false,
-    hiring_progress: [],
-    submit_document: "",
-    start_date: "",
-    end_date: "",
-    etc: "",
+    required_grade: myRecruitment?.required_grade || undefined,
+    required_licenses: myRecruitment?.required_licenses || [],
+    start_time: myRecruitment?.start_time || "",
+    end_time: myRecruitment?.end_time || "",
+    train_pay: myRecruitment?.train_pay || "",
+    pay: myRecruitment?.pay || "",
+    benefits: myRecruitment?.benefits || "",
+    military: myRecruitment?.military || false,
+    hiring_progress: myRecruitment?.hiring_progress || [],
+    submit_document: myRecruitment?.submit_document || "",
+    start_date: myRecruitment?.start_date || "",
+    end_date: myRecruitment?.end_date || "",
+    etc: myRecruitment?.etc || "",
   });
 
   const { mutateAsync } = useUpdateRecruitment(form);
 
-  useEffect(() => {
-    if (myRecruitment) {
-      setForm({
-        required_grade: myRecruitment.required_grade,
-        required_licenses: myRecruitment.required_licenses,
-        start_time: myRecruitment.start_time,
-        end_time: myRecruitment.end_time,
-        train_pay: myRecruitment.train_pay,
-        pay: myRecruitment.pay,
-        benefits: myRecruitment.benefits,
-        military: myRecruitment.military,
-        hiring_progress: myRecruitment.hiring_progress,
-        submit_document: myRecruitment.submit_document,
-        start_date: myRecruitment.start_date,
-        end_date: myRecruitment.end_date,
-        etc: myRecruitment.etc,
-      });
-    }
-  }, [myRecruitment, setForm]);
-
   const { area, setArea, resetArea } = useAreaState();
-  const router = useRouter();
 
   if (isLoading) {
     return (
@@ -101,11 +77,11 @@ export default function EditRecruiment() {
         </VStack>
         <MenuWrapper>
           <HStack gap={14}>
-            <CancelButton onClick={() => router.push("/")}>취소</CancelButton>
+            <CancelButton onClick={() => setCanEdit(false)}>취소</CancelButton>
             <SaveButton
               onClick={async () => {
                 await mutateAsync(myRecruitment!.recruitment_id);
-                router.push("/");
+                setCanEdit(false);
               }}
             >
               저장
@@ -164,7 +140,7 @@ export default function EditRecruiment() {
                 </RadioButton>
               </HStack>
             </HStack>
-            <HStack>
+            <HStack width={350}>
               <Title>채용 전환 연봉</Title>
               <UnitInputWrapper>
                 <Input name="pay" value={form.pay} onChange={onChange} autoComplete="off" />
@@ -182,9 +158,9 @@ export default function EditRecruiment() {
         <HStack>
           <Title>채용 절차 *</Title>
           <VStack width={800} gap={20}>
-            <AddRecruitmentButton onClick={() => openModal("HIRING_PROGRESS")}>절차 추가하기 +</AddRecruitmentButton>
             {!!form.hiring_progress.length &&
               form.hiring_progress.map((progress) => hiringProgressType[progress]).join(" → ")}
+            <AddRecruitmentButton onClick={() => openModal("HIRING_PROGRESS")}>절차 수정하기 +</AddRecruitmentButton>
           </VStack>
         </HStack>
         <HStack>
@@ -245,7 +221,7 @@ export default function EditRecruiment() {
         <HStack>
           <Title>국가 자격증</Title>
           <VStack width={800} gap={20}>
-            <AddRecruitmentButton onClick={() => openModal("LICENSE")}>자격증 추가하기 +</AddRecruitmentButton>
+            <AddRecruitmentButton onClick={() => openModal("LICENSE")}>자격증 수정하기 +</AddRecruitmentButton>
             {!!form.required_licenses.length && form.required_licenses.join(", ")}
           </VStack>
         </HStack>
@@ -344,6 +320,7 @@ const Grid = styled.div`
   width: 100%;
   display: grid;
   grid-template-columns: 1.2fr 1fr;
+  gap: 20px;
 `;
 
 const LoadingContainer = styled.div`

@@ -33,6 +33,7 @@ export interface IRecruitment {
   start_date: string;
   end_date: string;
   etc: string;
+  winter_intern?: boolean;
 }
 
 export interface IEditRecruitmentRequest extends Omit<IRecruitment, "areas"> {
@@ -42,6 +43,7 @@ export interface IEditRecruitmentRequest extends Omit<IRecruitment, "areas"> {
 export interface IMyRecruitmentResponse extends Omit<IRecruitment, "areas"> {
   recruitment_id: number;
   recruit_year: number;
+  buisness_number?: string;
   areas: {
     id?: number;
     job: string[];

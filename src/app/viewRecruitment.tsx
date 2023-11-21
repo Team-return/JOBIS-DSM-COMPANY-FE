@@ -10,6 +10,7 @@ import { IEditRecruitmentRequest } from "@/apis/recruitments/types";
 import { hiringProgressType } from "@/utils/translate";
 import { Spinner } from "@/components/Spinner";
 import { NoResult } from "@/components/Recruitments/NoResult";
+import { regex } from "@/utils/regex";
 
 export default function ViewRecruitment({ setCanEdit }: { setCanEdit: React.Dispatch<SetStateAction<boolean>> }) {
   const { data: myRecruitment, error, isLoading } = useMyRecruitment();
@@ -30,6 +31,8 @@ export default function ViewRecruitment({ setCanEdit }: { setCanEdit: React.Disp
     end_date: "",
     etc: "",
   });
+
+  const { money } = regex;
 
   useEffect(() => {
     if (myRecruitment) {
@@ -79,7 +82,7 @@ export default function ViewRecruitment({ setCanEdit }: { setCanEdit: React.Disp
             </Text>
           </HStack>
           <Text color="gray60" size="Body2">
-            사업자 번호
+            {myRecruitment?.buisness_number}
           </Text>
         </VStack>
         <MenuWrapper>
@@ -126,7 +129,7 @@ export default function ViewRecruitment({ setCanEdit }: { setCanEdit: React.Disp
             <HStack>
               <Title>실습수당 *</Title>
               <Text color="gray90" size="Body1">
-                {myRecruitment?.train_pay && myRecruitment.train_pay + "만원"}
+                {myRecruitment?.train_pay && money(myRecruitment?.train_pay.toString()) + "원"}
               </Text>
             </HStack>
           </VStack>
@@ -185,6 +188,7 @@ export default function ViewRecruitment({ setCanEdit }: { setCanEdit: React.Disp
                   <br />
                   <br />
                   <br />
+                  {area.preferential_treatment}
                 </Text>
               );
             })}

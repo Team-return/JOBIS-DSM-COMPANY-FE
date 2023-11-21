@@ -116,7 +116,7 @@ export default function EditRecruiment({ setCanEdit }: { setCanEdit: React.Dispa
               <Title>실습수당 *</Title>
               <UnitInputWrapper>
                 <Input name="train_pay" value={form.train_pay} onChange={onChange} autoComplete="off" />
-                <Unit>만원</Unit>
+                <Unit>원</Unit>
               </UnitInputWrapper>
             </HStack>
           </VStack>

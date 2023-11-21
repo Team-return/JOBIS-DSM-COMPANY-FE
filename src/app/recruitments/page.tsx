@@ -42,6 +42,7 @@ export default function Registration() {
     start_date: "",
     end_date: "",
     etc: "",
+    winter_intern: true,
   });
 
   const {
@@ -63,7 +64,7 @@ export default function Registration() {
 
   const createRecruitmentRequest = useCreateRecruitmentRequest({
     ...form,
-    benefits: meal.length !== 0 ? meal.join(", ") + "\n" : "" + form.benefits,
+    benefits: meal.length !== 0 ? meal.join(", ") : "" + form.benefits && "\n" + form.benefits,
   });
 
   const { modalState, closeModal, openModal } = useModal();
@@ -224,7 +225,7 @@ export default function Registration() {
           required
           onChange={onChange}
           title="실습수당"
-          placeholder="만원/월"
+          placeholder="원/월"
           unit="만원/월"
           autoComplete="off"
         />

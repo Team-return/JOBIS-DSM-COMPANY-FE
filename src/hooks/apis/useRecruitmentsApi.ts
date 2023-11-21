@@ -1,4 +1,10 @@
-import { createRecruitmentsRequest, myRecruitment, updateRecruitArea, updateRecruitment } from "@/apis/recruitments";
+import {
+  addRecruitArea,
+  createRecruitmentsRequest,
+  myRecruitment,
+  updateRecruitArea,
+  updateRecruitment,
+} from "@/apis/recruitments";
 import { IArea, IEditRecruitmentRequest, IRecruitment } from "@/apis/recruitments/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useToastStore } from "@team-return/design-system";
@@ -54,6 +60,27 @@ export const useUpdateRecruitment = (body: IEditRecruitmentRequest) => {
   });
 };
 
+export const useAddRecruitArea = (body: IArea, recruitment_id: number) => {
+  const queryClient = useQueryClient();
+  const { append } = useToastStore();
+
+  return useMutation(() => addRecruitArea(body, recruitment_id), {
+    onSuccess: () => {
+      queryClient.invalidateQueries(["myRecruit"]);
+      append({
+        type: "GREEN",
+        message: "성공적으로 추가되었습니다",
+      });
+    },
+    onError: () => {
+      append({
+        type: "RED",
+        message: "추가에 실패하였습니다",
+      });
+    },
+  });
+};
+
 export const useUpdateRecruitArea = (body: IArea) => {
   const queryClient = useQueryClient();
   const { append } = useToastStore();
@@ -61,6 +88,10 @@ export const useUpdateRecruitArea = (body: IArea) => {
   return useMutation((id: number) => updateRecruitArea(body, id), {
     onSuccess: () => {
       queryClient.invalidateQueries(["myRecruit"]);
+      append({
+        type: "GREEN",
+        message: "수정이 완료되었습니다",
+      });
     },
     onError: () => {
       append({

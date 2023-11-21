@@ -1,7 +1,7 @@
 "use client";
 
 import styled from "styled-components";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import OptionTitle from "@/components/OptionTitle";
 import { CheckBox, HStack, Icon, Stack, VStack, theme } from "@team-return/design-system";
 import { CustomInput, Input, TextArea } from "@/components/Input";
@@ -25,6 +25,7 @@ import { useAreaState } from "@/store/areasState";
 export default function Registration() {
   const date = new Date();
   const { hiringProgress } = useHiringProgressStore();
+  const [meal, setMeal] = useState<string[]>([]);
 
   const { form, onChange, setForm } = useInput<IRecruitment>({
     areas: [],
@@ -60,7 +61,10 @@ export default function Registration() {
     etc,
   } = form;
 
-  const createRecruitmentRequest = useCreateRecruitmentRequest(form);
+  const createRecruitmentRequest = useCreateRecruitmentRequest({
+    ...form,
+    benefits: form.benefits + " " + meal.join(", "),
+  });
 
   const { modalState, closeModal, openModal } = useModal();
   const { resetArea } = useAreaState();
@@ -231,6 +235,38 @@ export default function Registration() {
           autoComplete="off"
         />
         <TextArea name="benefits" value={benefits} onChange={onChange} title="복리후생" />
+        <HStack width={350} gap={20}>
+          <CheckBox
+            type="checkbox"
+            onChange={(e) =>
+              e.target.checked
+                ? setMeal((prev) => [...prev, "조식제공"])
+                : setMeal((prev) => prev.filter((res) => res !== "조식제공"))
+            }
+          >
+            조식제공
+          </CheckBox>
+          <CheckBox
+            type="checkbox"
+            onChange={(e) =>
+              e.target.checked
+                ? setMeal((prev) => [...prev, "중식제공"])
+                : setMeal((prev) => prev.filter((res) => res !== "중식제공"))
+            }
+          >
+            중식제공
+          </CheckBox>
+          <CheckBox
+            type="checkbox"
+            onChange={(e) =>
+              e.target.checked
+                ? setMeal((prev) => [...prev, "석식제공"])
+                : setMeal((prev) => prev.filter((res) => res !== "석식제공"))
+            }
+          >
+            석식제공
+          </CheckBox>
+        </HStack>
         <CustomInput>
           <CheckBox
             name="military"
@@ -244,11 +280,13 @@ export default function Registration() {
 
         <OptionTitle title="채용 절차" />
         <CustomInput title="채용 절차" required>
-          <AddRecruitmentButton onClick={() => openModal("HIRING_PROGRESS")}>절차 추가하기 +</AddRecruitmentButton>
+          <VStack justify="center">
+            {hiring_progress.map((progress) => hiringProgressType[progress]).join(" → ")}
+          </VStack>
         </CustomInput>
         {!!hiringProgress.length && (
           <CustomInput>
-            <VStack>{hiring_progress.map((progress) => hiringProgressType[progress]).join(" → ")}</VStack>
+            <AddRecruitmentButton onClick={() => openModal("HIRING_PROGRESS")}>절차 추가하기 +</AddRecruitmentButton>
           </CustomInput>
         )}
         <Input
@@ -461,7 +499,6 @@ const AddRecruitmentButton = styled.button`
   justify-content: center;
   align-items: center;
   border: 1px solid ${theme.color.gray50};
-  margin-top: 10px;
   color: ${theme.color.gray60};
   padding: 8px 20px;
   border-radius: 8px;

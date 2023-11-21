@@ -43,7 +43,7 @@ export default function Register() {
     manager_phone_no: "",
     sub_manager_phone_no: undefined,
     fax: undefined,
-    password: 1234,
+    password: typeof window !== "undefined" ? Number(sessionStorage.getItem("p")) || 1234 : 1234,
     business_number:
       typeof window !== "undefined" ? (sessionStorage.getItem("company_number")?.replace(/-/g, "") as string) : "",
     company_profile_url: "",
@@ -91,6 +91,7 @@ export default function Register() {
 
   const { mutate: registerCompany } = useCompanyRegister({
     ...form,
+    password: 1234,
     founded_at: date_number(founded_at),
     fax: date_number(fax ?? "") || undefined,
     manager_phone_no: manager_phone_no?.replace(/-/g, ""),

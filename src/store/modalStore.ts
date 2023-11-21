@@ -9,6 +9,7 @@ export type ModalType =
   | "USE_TECH"
   | "LICENSE"
   | "EDIT_RECRUIT_AREA"
+  | "ADD_RECRUIT_AREA"
   | "";
 
 export interface IModalState {

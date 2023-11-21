@@ -71,7 +71,12 @@ export const Applicant = () => {
                 {res.attachments?.map(
                   (attachment, idx) =>
                     attachment.type == "FILE" && (
-                      <Link key={idx} href={attachment.url} passHref>
+                      <Link
+                        key={idx}
+                        href={`${process.env.NEXT_PUBLIC_IMAGE_URL}/${attachment.url}`}
+                        target="_blank"
+                        passHref
+                      >
                         <Url>{attachment.url}</Url>
                       </Link>
                     )
@@ -95,11 +100,13 @@ const Container = styled.div`
 `;
 
 const Grid = styled.div`
+  display: flex;
+  padding: 20px 40px;
+  flex-direction: row;
   width: 100%;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
   gap: 25px;
   margin-top: 30px;
+  overflow: scroll;
 `;
 
 const LoadingContainer = styled.div`
@@ -110,7 +117,7 @@ const LoadingContainer = styled.div`
 const ApplicationContainer = styled.div`
   position: relative;
   padding: 20px 22px;
-  width: 297px;
+  min-width: 300px;
   min-height: 396px;
   box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.05);
   border-radius: 10px;

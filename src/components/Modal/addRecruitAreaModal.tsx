@@ -6,29 +6,28 @@ import { useModal } from "@/hooks/useModal";
 import { CheckBox, HStack, Icon, Stack, Text, VStack, theme } from "@team-return/design-system";
 import { IEditRecruitmentRequest } from "@/apis/recruitments/types";
 import { useAreaState } from "@/store/areasState";
-import { useMyRecruitment, useUpdateRecruitArea } from "@/hooks/apis/useRecruitmentsApi";
+import { useAddRecruitArea, useMyRecruitment } from "@/hooks/apis/useRecruitmentsApi";
 import OutsideClickHandler from "react-outside-click-handler";
 
 const jobType = ["WEB", "APP", "GAME", "EMBEDDED", "SECURITY", "AI", "ASD"];
 
 interface IPropsType {
+  recruitment_id: number;
   setForm: Dispatch<SetStateAction<IEditRecruitmentRequest>>;
 }
 
-const EditRecruitAreaModal = ({ setForm }: IPropsType) => {
+const AddRecruitAreaModal = ({ recruitment_id, setForm }: IPropsType) => {
   const { data: jobs } = useGetCode("JOB");
   const { data: tech_list } = useGetCode("TECH");
   const { closeModal } = useModal();
-  const [searchText, setSearchText] = useState<string>("");
-  const [inputFoucs, setInputFocus] = useState(false);
-  const searchTechsArray = tech_list?.codes
-    .filter((techItem) => techItem.keyword.toLowerCase().includes(searchText.toLowerCase()))
-    .filter((tech) => tech.code);
 
   const { area, setArea, resetArea } = useAreaState();
 
   const { data: myRecruitment } = useMyRecruitment();
-  const { mutate } = useUpdateRecruitArea({ ...area });
+  const { mutate } = useAddRecruitArea({ ...area }, recruitment_id);
+
+  const [searchText, setSearchText] = useState<string>("");
+  const [inputFoucs, setInputFocus] = useState(false);
 
   useEffect(() => {
     if (myRecruitment) {
@@ -64,11 +63,15 @@ const EditRecruitAreaModal = ({ setForm }: IPropsType) => {
     area?.job_codes?.filter((datas) => datas === tech.code).length ? DeleteArray(tech.code) : PushArray(tech);
   };
 
+  const searchTechsArray = tech_list?.codes
+    .filter((techItem) => techItem.keyword.toLowerCase().includes(searchText.toLowerCase()))
+    .filter((tech) => tech.code);
+
   return (
     <>
       <Container>
         <Text size="Heading5" color="liteBlue" align="start">
-          채용 절차
+          채용직무
         </Text>
         <Stack align="center" margin={["bottom", 70]}>
           <FieldTitleWrapper>
@@ -229,7 +232,7 @@ const EditRecruitAreaModal = ({ setForm }: IPropsType) => {
           </CancelBtn>
           <SuccessBtn
             onClick={() => {
-              mutate(area.id!);
+              mutate();
               setForm((prev) => ({ ...prev, areas: [area] }));
               resetArea();
               closeModal();
@@ -243,7 +246,7 @@ const EditRecruitAreaModal = ({ setForm }: IPropsType) => {
   );
 };
 
-export default EditRecruitAreaModal;
+export default AddRecruitAreaModal;
 
 const Container = styled.div`
   width: 700px;
@@ -366,6 +369,23 @@ const TextArea = styled.textarea`
   }
 `;
 
+const SearchIconWrapper = styled.div`
+  position: absolute;
+  right: 12px;
+`;
+
+const TechInput = styled.input<{ marginTop?: number }>`
+  width: 180px;
+  height: 45px;
+  font-size: 15px;
+  padding: 10px 42px 10px 15px;
+  outline: none;
+  border-radius: 2px;
+  border: 1px solid ${theme.color.gray50};
+  background: ${theme.color.gray20};
+  margin-top: ${({ marginTop }) => marginTop + "px"};
+`;
+
 const TechWrapper = styled.div`
   position: relative;
   display: flex;
@@ -393,23 +413,6 @@ const SearchTechCard = styled.div`
   background-color: white;
   font-size: 17px;
   cursor: pointer;
-`;
-
-const TechInput = styled.input<{ marginTop?: number }>`
-  width: 180px;
-  height: 45px;
-  font-size: 15px;
-  padding: 10px 42px 10px 15px;
-  outline: none;
-  border-radius: 2px;
-  border: 1px solid ${theme.color.gray50};
-  background: ${theme.color.gray20};
-  margin-top: ${({ marginTop }) => marginTop + "px"};
-`;
-
-const SearchIconWrapper = styled.div`
-  position: absolute;
-  right: 12px;
 `;
 
 const CardWrapper = styled.div`

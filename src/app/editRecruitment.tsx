@@ -72,7 +72,7 @@ export default function EditRecruiment({ setCanEdit }: { setCanEdit: React.Dispa
             </Text>
           </HStack>
           <Text color="gray60" size="Body2">
-            사업자 번호
+            {myRecruitment?.company_biz_no}
           </Text>
         </VStack>
         <MenuWrapper>

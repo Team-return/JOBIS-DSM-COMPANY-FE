@@ -82,7 +82,7 @@ export default function ViewRecruitment({ setCanEdit }: { setCanEdit: React.Disp
             </Text>
           </HStack>
           <Text color="gray60" size="Body2">
-            {myRecruitment?.buisness_number}
+            {myRecruitment?.company_biz_no}
           </Text>
         </VStack>
         <MenuWrapper>

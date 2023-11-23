@@ -43,7 +43,7 @@ export interface IEditRecruitmentRequest extends Omit<IRecruitment, "areas"> {
 export interface IMyRecruitmentResponse extends Omit<IRecruitment, "areas"> {
   recruitment_id: number;
   recruit_year: number;
-  buisness_number?: string;
+  company_biz_no?: string;
   areas: {
     id?: number;
     job: string[];

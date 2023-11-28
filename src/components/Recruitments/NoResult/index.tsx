@@ -12,7 +12,7 @@ export const NoResult = () => {
         <Text color="gray90" size="Heading4">
           작성된 모집의뢰서가 없습니다
         </Text>
-        <Link href="/recruitments">
+        <Link href="/recruitments/chose">
           <Button>
             <Text color="gray10" size="Body1">
               모집의뢰서 작성하러 가기

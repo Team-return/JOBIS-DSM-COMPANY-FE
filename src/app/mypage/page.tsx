@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 import { Cookies } from "react-cookie";
 import { companyType } from "@/utils/translate";
 import { regex } from "@/utils/regex";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function MyPage() {
   const { data: myCompany, isLoading } = useMyCompanyInfo();
@@ -18,6 +19,7 @@ export default function MyPage() {
   const router = useRouter();
   const cookie = new Cookies();
   const { phone_number, buisness_number } = regex;
+  const queryClient = useQueryClient();
 
   if (isLoading)
     return (
@@ -68,6 +70,7 @@ export default function MyPage() {
                     cookie.remove("refresh_token");
                     setDropDown(false);
                     router.push("/login");
+                    queryClient.removeQueries();
                   }}
                 >
                   로그아웃

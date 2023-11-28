@@ -19,7 +19,7 @@ import TechModal from "@/components/Modal/techModal";
 import { hiringProgressType } from "@/utils/translate";
 import LicenseModal from "@/components/Modal/licenseModal";
 import XBtn from "../../../public/X.svg";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useAreaState } from "@/store/areasState";
 
 export default function Registration() {
@@ -42,8 +42,16 @@ export default function Registration() {
     start_date: "",
     end_date: "",
     etc: "",
-    winter_intern: true,
+    winter_intern: false,
   });
+
+  const params = useSearchParams();
+
+  console.log(params.get("type"));
+
+  useEffect(() => {
+    if (params.get("type") === "winter") setForm((prev) => ({ ...prev, winter_intern: true }));
+  }, [params.get("type")]);
 
   const {
     areas,

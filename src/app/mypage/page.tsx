@@ -53,6 +53,7 @@ export default function MyPage() {
             <OutsideClickHandler onOutsideClick={() => setDropDown(false)}>
               <MoreDetail>
                 <div
+                  style={{ width: "100%", cursor: "pointer" }}
                   onClick={() => {
                     router.push("/mypage/edit");
                     setDropDown(false);
@@ -61,7 +62,7 @@ export default function MyPage() {
                   기업정보 수정
                 </div>
                 <div
-                  style={{ color: "red" }}
+                  style={{ color: "red", width: "100%", cursor: "pointer" }}
                   onClick={() => {
                     cookie.remove("access_token");
                     cookie.remove("refresh_token");
@@ -288,7 +289,7 @@ const LoadingContainer = styled.div`
 
 const MenuWrapper = styled.div`
   position: relative;
-  cursor: pointer;
+  /* cursor: pointer; */
   margin: auto 0 auto auto;
   height: 80px;
   display: flex;

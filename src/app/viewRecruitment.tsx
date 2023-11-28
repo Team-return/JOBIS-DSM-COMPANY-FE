@@ -32,7 +32,7 @@ export default function ViewRecruitment({ setCanEdit }: { setCanEdit: React.Disp
     etc: "",
   });
 
-  const { money } = regex;
+  const { money, buisness_number } = regex;
 
   useEffect(() => {
     if (myRecruitment) {
@@ -82,7 +82,7 @@ export default function ViewRecruitment({ setCanEdit }: { setCanEdit: React.Disp
             </Text>
           </HStack>
           <Text color="gray60" size="Body2">
-            {myRecruitment?.company_biz_no}
+            {buisness_number(myRecruitment?.company_biz_no || "")}
           </Text>
         </VStack>
         <MenuWrapper>

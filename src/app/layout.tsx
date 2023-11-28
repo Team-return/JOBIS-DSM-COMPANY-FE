@@ -21,6 +21,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="ko" className={notoSans.className}>
       <body>
+        <title>JOBIS</title>
         <div id="modal-root"></div>
         <ReactQuery>
           <StyledComponentsRegistry>

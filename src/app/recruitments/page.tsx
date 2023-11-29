@@ -47,8 +47,6 @@ export default function Registration() {
 
   const params = useSearchParams();
 
-  console.log(params.get("type"));
-
   useEffect(() => {
     if (params.get("type") === "winter") setForm((prev) => ({ ...prev, winter_intern: true }));
   }, [params.get("type")]);
@@ -73,6 +71,8 @@ export default function Registration() {
   const createRecruitmentRequest = useCreateRecruitmentRequest({
     ...form,
     benefits: meal.length !== 0 ? meal.join(", ") : "" + form.benefits && "\n" + form.benefits,
+    pay: pay.replaceAll(",", ""),
+    train_pay: train_pay.replaceAll(",", ""),
   });
 
   const { modalState, closeModal, openModal } = useModal();

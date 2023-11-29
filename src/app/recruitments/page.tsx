@@ -101,6 +101,18 @@ export default function Registration() {
     }
   }, [before]);
 
+  const inputPriceFormat = (str: string) => {
+    const comma = (str: string) => {
+      str = String(str);
+      return str.replace(/(\d)(?=(?:\d{3})+(?!\d))/g, "$1,");
+    };
+    const uncomma = (str: string) => {
+      str = String(str);
+      return str.replace(/[^\d]+/g, "");
+    };
+    return comma(uncomma(str));
+  };
+
   return (
     <Container>
       <RecruimentWrapper>
@@ -224,7 +236,7 @@ export default function Registration() {
           name="train_pay"
           value={train_pay}
           required
-          onChange={onChange}
+          onChange={(e) => setForm((prev) => ({ ...prev, train_pay: inputPriceFormat(e.target.value) }))}
           title="실습수당"
           placeholder="원/월"
           unit="원/월"
@@ -233,7 +245,7 @@ export default function Registration() {
         <Input
           name="pay"
           value={pay}
-          onChange={onChange}
+          onChange={(e) => setForm((prev) => ({ ...prev, pay: inputPriceFormat(e.target.value) }))}
           title="정규직 전환시"
           placeholder="만원/년"
           unit="만원/년"

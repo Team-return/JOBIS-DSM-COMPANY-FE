@@ -145,9 +145,7 @@ const GatherModal = ({ setForm }: IPropsType) => {
         </SmallWrapper>
       </BigWrapper>
       <BigWrapper>
-        <Title>
-          우대사항<span style={{ color: "#0087FF" }}> *</span>
-        </Title>
+        <Title>우대사항</Title>
         <ContentsText>우대사항을 입력해주세요</ContentsText>
         <SmallWrapper>
           <Textarea
@@ -183,7 +181,7 @@ const GatherModal = ({ setForm }: IPropsType) => {
   );
 };
 
-export default GatherModal; 
+export default GatherModal;
 
 const Container = styled.div`
   border: 3px solid white;

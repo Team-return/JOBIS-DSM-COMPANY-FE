@@ -11,10 +11,12 @@ import { hiringProgressType } from "@/utils/translate";
 import { Spinner } from "@/components/Spinner";
 import { NoResult } from "@/components/Recruitments/NoResult";
 import { regex } from "@/utils/regex";
+import { useRouter } from "next/navigation";
 
 export default function ViewRecruitment({ setCanEdit }: { setCanEdit: React.Dispatch<SetStateAction<boolean>> }) {
   const { data: myRecruitment, error, isLoading } = useMyRecruitment();
   const [dropdown, setDropDown] = useState(false);
+  const router = useRouter();
 
   const { setForm } = useInput<IEditRecruitmentRequest>({
     required_grade: undefined,
@@ -88,13 +90,25 @@ export default function ViewRecruitment({ setCanEdit }: { setCanEdit: React.Disp
         <MenuWrapper>
           {dropdown && (
             <OutsideClickHandler onOutsideClick={() => setDropDown(false)}>
-              <MoreDetail
-                onClick={() => {
-                  setCanEdit(true);
-                  setDropDown(false);
-                }}
-              >
-                모집의뢰서 수정
+              <MoreDetail>
+                <div
+                  style={{ width: "100%", cursor: "pointer" }}
+                  onClick={() => {
+                    setCanEdit(true);
+                    setDropDown(false);
+                  }}
+                >
+                  모집의뢰서 수정
+                </div>
+                <div
+                  style={{ width: "100%", cursor: "pointer" }}
+                  onClick={() => {
+                    setDropDown(false);
+                    router.push("/recruitments/chose");
+                  }}
+                >
+                  모집의뢰서 추가
+                </div>
               </MoreDetail>
             </OutsideClickHandler>
           )}
